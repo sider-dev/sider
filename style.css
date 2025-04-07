@@ -1,4 +1,4 @@
-/* Base Reset and Typography */
+/* Base Reset & Typography */
 * {
   margin: 0;
   padding: 0;
@@ -8,8 +8,8 @@
 body {
   font-family: 'Inter', sans-serif;
   line-height: 1.6;
+  background: #e0f7ff; /* Light blue base color */
   color: #333;
-  background: #f9f9f9;
 }
 
 /* Container */
@@ -49,7 +49,7 @@ body {
 }
 .main-nav a.active,
 .main-nav a:hover {
-  color: #007BFF;
+  color: #009688; /* Motivating teal */
 }
 
 /* Mobile Navigation */
@@ -67,16 +67,51 @@ body {
   cursor: pointer;
 }
 
-/* Hero Section */
+/* Logo & Binary Animation */
+.binary-logo-svg {
+  width: 250px;
+  height: auto;
+}
+.binary-digit {
+  font-family: monospace;
+  font-size: 14px;
+  fill: #009688;
+  opacity: 0.8;
+  /* Simple vertical bounce animation */
+  animation: binaryBounce 2s infinite alternate;
+}
+@keyframes binaryBounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-5px); }
+}
+.logo-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  fill: url(#summerGradient);
+}
+/* Define summer gradient in SVG if needed */
+svg.binary-logo-svg defs {
+  /* You could define a gradient here for the text if desired */
+}
+
+/* Hero Section with Animated Sky */
 .hero {
   position: relative;
   height: 100vh;
-  background: url('https://source.unsplash.com/1600x900/?technology,city') center/cover no-repeat;
+  background: linear-gradient(135deg, #87CEFA, #B2DFDB, #FFF176);
+  background-size: 400% 400%;
+  animation: skyAnimation 15s ease infinite;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
   text-align: center;
+  color: #fff;
+}
+@keyframes skyAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 .hero-overlay {
   position: absolute;
@@ -84,7 +119,7 @@ body {
   left:0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.25);
 }
 .hero .container {
   position: relative;
@@ -97,18 +132,19 @@ body {
   transition: background 0.3s;
   text-decoration: none;
   color: #fff;
+  border-radius: 4px;
 }
 .btn-primary {
-  background: #007BFF;
+  background: #009688; /* Teal */
 }
 .btn-primary:hover {
-  background: #0056b3;
+  background: #00796B;
 }
 .btn-secondary {
-  background: #6c757d;
+  background: #FFC107; /* Vibrant yellow */
 }
 .btn-secondary:hover {
-  background: #5a6268;
+  background: #FFB300;
 }
 
 /* Section Styling */
@@ -116,7 +152,7 @@ body {
   padding: 4rem 0;
 }
 .section-alt {
-  background: #f1f1f1;
+  background: #F1F8E9; /* Light, refreshing green */
 }
 .section-heading {
   text-align: center;
@@ -143,7 +179,7 @@ body {
   width: 40px;
   height: 40px;
   margin-bottom: 1rem;
-  color: #007BFF;
+  color: #009688;
 }
 
 /* Why Us Grid */
@@ -162,7 +198,7 @@ body {
   width: 40px;
   height: 40px;
   margin-bottom: 1rem;
-  color: #007BFF;
+  color: #009688;
 }
 
 /* Contact Section */
@@ -171,12 +207,7 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
 }
-.contact-info {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 8px;
-}
-.contact-form {
+.contact-info, .contact-form {
   background: #fff;
   padding: 2rem;
   border-radius: 8px;
