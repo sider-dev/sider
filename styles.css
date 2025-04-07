@@ -316,7 +316,7 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 300px; /* Adjust as needed */
+    min-height: 100px; /* Adjust as needed */
 }
 
 .contact-info {
