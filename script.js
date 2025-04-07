@@ -170,59 +170,16 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(scrollStyle);
     
-    // Form submission
+// Form submission
 const contactForm = document.getElementById('contact-form');
 contactForm.addEventListener('submit', function(e) {
-    e.preventDefault();
+    // We'll let the form submit naturally to Google Forms
+    // But we can still do things before submission
+    console.log('Form submitted to Google Forms');
     
-    // Get form data
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const subject = document.getElementById('subject').value;
-    const message = document.getElementById('message').value;
-    
-    // Create a hidden iframe to handle the response
-    const iframe = document.createElement('iframe');
-    iframe.name = 'hidden-iframe';
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-    
-    // Create a form element to submit
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'https://docs.google.com/forms/d/e/1FAIpQLSfhJ2LTWXNthimVO_95hEy009Oq_BEhgaT0h7d6OZwODHFamA/formResponse';
-    form.target = 'hidden-iframe';
-    
-    // Add form data as hidden fields
-    const formFields = [
-        { name: 'entry.2096363215', value: name },
-        { name: 'entry.1324022853', value: email },
-        { name: 'entry.1233244212', value: subject },
-        { name: 'entry.234134559', value: message }
-    ];
-    
-    formFields.forEach(field => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = field.name;
-        input.value = field.value;
-        form.appendChild(input);
-    });
-    
-    // Append form to document, submit it, and remove it
-    document.body.appendChild(form);
-    form.submit();
-    
-    // Show success message
+    // Optional: Show a confirmation message
     alert('Thank you for your message! We will get back to you soon.');
     
-    // Reset the form
-    this.reset();
-    
-    // Clean up after a delay
-    setTimeout(() => {
-        document.body.removeChild(form);
-        document.body.removeChild(iframe);
-    }, 1000);
+    // The form will automatically reset after submission
 });
 
