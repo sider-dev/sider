@@ -1,240 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIDER - Software Innovation & Digital Economy, Reimagined</title>
-  <meta name="description" content="SIDER delivers high-quality software development with innovative digital solutions.">
-  
-  <!-- Favicon -->
-  <link rel="icon" href="assets/favicon.ico" sizes="any">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- External CSS -->
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIDER.dev | Software Development & Digital Innovation</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header class="site-header" id="site-header">
-    <div class="container header-content">
-      <div class="site-logo">
-        <a href="#hero">
-          <!-- Animated Binary Logo -->
-          <svg class="binary-logo-svg" viewBox="0 0 250 50" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="logoTitle">
-            <title id="logoTitle">SIDER.dev Logo</title>
-            <!-- Binary Matrix effect: animated falling binary digits -->
-            <g class="binary-group">
-              <text x="5" y="20" class="binary-digit">1 0 1 0 1</text>
-              <text x="5" y="40" class="binary-digit">0 1 0 1 0</text>
-            </g>
-            <!-- Company Name -->
-            <text x="120" y="35" class="logo-text">SIDER</text>
-          </svg>
-        </a>
-      </div>
-  
-      <!-- Desktop Navigation -->
-      <nav class="main-nav" aria-label="Main Navigation">
-        <ul>
-          <li><a href="#hero" class="active">Home</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#why-us">Why SIDER?</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-  
-      <!-- Mobile Navigation Toggle -->
-      <button class="mobile-nav-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-nav-menu">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
-      </button>
-  
-      <!-- Mobile Navigation Menu -->
-      <nav class="mobile-nav" id="mobile-nav-menu" aria-label="Mobile Navigation">
-        <ul>
-          <li><a href="#hero">Home</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#why-us">Why SIDER?</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-  
-  <main>
-    <!-- Hero Section with animated sunny sky background -->
-    <section class="hero" id="hero">
-      <div class="hero-overlay"></div>
-      <div class="container hero-content text-center">
-        <h1 class="fade-in">Software Innovation & Digital Economy, Reimagined</h1>
-        <p class="subtitle fade-in" data-wow-delay="0.2s">
-          SIDER delivers innovative, high-quality software solutions designed to propel your business forward.
-        </p>
-        <div class="hero-actions fade-in" data-wow-delay="0.4s">
-          <a href="#contact" class="btn btn-primary">Start Your Project</a>
-          <a href="#services" class="btn btn-secondary">Explore Services</a>
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">SIDER<span>.dev</span></div>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#why-sider">Why SIDER?</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="binary-animation" id="binary-animation"></div>
+        <div class="container hero-content">
+            <h1>Reimagining Software Innovation</h1>
+            <p>Propelling digital business forward through cutting-edge solutions and transformative technology</p>
+            <a href="#contact" class="btn primary-btn">Start Your Project</a>
+        </div>
     </section>
-  
+
     <!-- Services Section -->
-    <section class="section section-alt" id="services">
-      <div class="container">
-        <div class="section-heading">
-          <h2 class="fade-in">Core Development Services</h2>
-          <p class="fade-in">Empowering modern businesses with robust digital foundations and innovative applications.</p>
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Services</h2>
+                <p>Comprehensive digital solutions tailored to your business needs</p>
+            </div>
+            <div class="services-grid">
+                <!-- Service cards will be populated via JavaScript -->
+            </div>
         </div>
-  
-        <div class="services-grid">
-          <!-- Each service card follows a similar structure -->
-          <div class="service-card fade-in">
-            <div class="service-icon">
-              <!-- Mobile Applications Icon -->
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
-              </svg>
-            </div>
-            <h3>Mobile Applications</h3>
-            <p>Native and cross-platform apps designed for seamless user experiences in today’s mobile-first landscape.</p>
-            <a href="#contact" class="link-arrow">Discuss Mobile Strategy</a>
-          </div>
-          <div class="service-card fade-in">
-            <div class="service-icon">
-              <!-- Web Development Icon -->
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75l-10.5 10.5m0 0l10.5-10.5m-10.5 10.5h10.5m-10.5 0V6.75" />
-              </svg>
-            </div>
-            <h3>Web Development</h3>
-            <p>Secure, scalable web platforms that form the foundation of your digital presence and operations.</p>
-            <a href="#contact" class="link-arrow">Architect Your Web App</a>
-          </div>
-          <div class="service-card fade-in">
-            <div class="service-icon">
-              <!-- Custom Software Icon -->
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
-              </svg>
-            </div>
-            <h3>Custom Software</h3>
-            <p>Bespoke solutions tailored to your unique challenges that give you a competitive edge.</p>
-            <a href="#contact" class="link-arrow">Request Custom Build</a>
-          </div>
-          <!-- Additional cards can be added similarly -->
-        </div>
-      </div>
     </section>
-  
-    <!-- Why Us Section -->
-    <section class="section" id="why-us">
-      <div class="container">
-        <div class="section-heading">
-          <h2 class="fade-in">Why Partner with SIDER.dev?</h2>
-          <p class="fade-in">We blend technical excellence with forward-thinking digital strategy to drive lasting innovation.</p>
+
+    <!-- Why SIDER Section -->
+    <section id="why-sider" class="why-us">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why SIDER?</h2>
+                <p>What sets us apart in the digital landscape</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="icon"><i class="fa-solid fa-users-gear"></i></div>
+                    <h3>Expert Teams</h3>
+                    <p>Specialized developers with deep industry expertise working collaboratively to deliver exceptional results.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i class="fa-solid fa-lightbulb"></i></div>
+                    <h3>Market Insight</h3>
+                    <p>Strategic understanding of digital trends to position your business ahead of the competition.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i class="fa-solid fa-gem"></i></div>
+                    <h3>Quality Focus</h3>
+                    <p>Rigorous testing and quality assurance processes ensuring reliable, high-performance solutions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i class="fa-solid fa-arrows-spin"></i></div>
+                    <h3>Agile Collaboration</h3>
+                    <p>Flexible, transparent development approach with regular updates and adaptability to changing needs.</p>
+                </div>
+            </div>
         </div>
-        <div class="why-us-grid">
-          <div class="feature-item fade-in">
-            <div class="feature-icon">
-              <!-- Expert Development Teams Icon -->
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
-              </svg>
-            </div>
-            <h4>Expert Teams</h4>
-            <p>World-class engineers delivering clean, scalable code with innovative solutions.</p>
-          </div>
-          <div class="feature-item fade-in">
-            <div class="feature-icon">
-              <!-- Digital Economy Insight Icon -->
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.355a11.95 11.95 0 01-5.25 0M6 18l3.75-3.75m0 0a6.01 6.01 0 016.75 0M18 18l-3.75-3.75m0 0a6.01 6.01 0 00-6.75 0" />
-              </svg>
-            </div>
-            <h4>Market Insight</h4>
-            <p>Leveraging trends and technological shifts to create future-proof solutions.</p>
-          </div>
-          <div class="feature-item fade-in">
-            <div class="feature-icon">
-              <!-- Quality & Reliability Icon -->
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.73-.664 1.192-.854l-2.496 3.03zM11.42 15.17L5.75 21A2.652 2.652 0 013 17.25l5.877-5.877m0 0a3.004 3.004 0 010-4.243l4.242-4.243a3.004 3.004 0 114.243 4.243l-4.242 4.243a3.004 3.004 0 01-4.243 0z" />
-              </svg>
-            </div>
-            <h4>Quality & Reliability</h4>
-            <p>Commitment to excellence with robust engineering and dependable project delivery.</p>
-          </div>
-          <div class="feature-item fade-in">
-            <div class="feature-icon">
-              <!-- Agile & Collaborative Icon -->
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-              </svg>
-            </div>
-            <h4>Agile & Collaborative</h4>
-            <p>Transparent, iterative processes ensuring seamless alignment and impactful outcomes.</p>
-          </div>
-        </div>
-      </div>
     </section>
-  
+
     <!-- Contact Section -->
-    <section class="section section-alt" id="contact">
-      <div class="container">
-        <div class="section-heading">
-          <h2 class="fade-in">Ready to Elevate Your Digital Strategy?</h2>
-          <p class="fade-in">Connect with our experts to discuss your software needs and accelerate your digital growth.</p>
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get In Touch</h2>
+                <p>Ready to transform your digital strategy? Let's talk.</p>
+            </div>
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="icon"><i class="fa-solid fa-envelope"></i></div>
+                        <div class="details">
+                            <h3>Email Us</h3>
+                            <p>info@sider.dev</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon"><i class="fa-solid fa-phone"></i></div>
+                        <div class="details">
+                            <h3>Call Us</h3>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon"><i class="fa-solid fa-location-dot"></i></div>
+                        <div class="details">
+                            <h3>Visit Us</h3>
+                            <p>123 Innovation Drive, Tech City, TC 10101</p>
+                        </div>
+                    </div>
+                </div>
+                <form id="contact-form" class="contact-form">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="subject" name="subject" placeholder="Subject">
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn primary-btn">Send Message</button>
+                </form>
+            </div>
         </div>
-  
-        <div class="contact-wrapper">
-          <div class="contact-info fade-in">
-            <h3>Contact Information</h3>
-            <p>Reach out via email or schedule a consultation to explore how SIDER can empower your business.</p>
-            <p><strong>Email:</strong> <a href="mailto:contact@sider.dev">contact@sider.dev</a></p>
-            <p><strong>Location:</strong> Switzerland (Serving Globally)</p>
-          </div>
-  
-          <!-- Contact Form (requires backend integration) -->
-          <form class="contact-form fade-in" action="YOUR_FORM_ENDPOINT" method="POST">
-            <div class="form-group">
-              <label for="name">Full Name</label>
-              <input type="text" id="name" name="name" class="form-control" required autocomplete="name">
-            </div>
-            <div class="form-group">
-              <label for="email">Company Email</label>
-              <input type="email" id="email" name="email" class="form-control" required autocomplete="email">
-            </div>
-            <div class="form-group">
-              <label for="message">Project Description or Inquiry</label>
-              <textarea id="message" name="message" class="form-control" rows="5" placeholder="Describe your project goals or questions..." required></textarea>
-            </div>
-            <div class="form-submit-btn">
-              <button type="submit" class="btn btn-primary">Send Inquiry</button>
-            </div>
-          </form>
-        </div>
-      </div>
     </section>
-  </main>
-  
-  <footer class="site-footer">
-    <div class="container footer-content">
-      <div>© <span id="current-year"></span> SIDER.dev Software Engineering Company</div>
-      <nav class="footer-links" aria-label="Footer Navigation">
-        <ul>
-          <li><a href="privacy.html">Privacy Policy</a></li>
-          <li><a href="terms.html">Terms of Service</a></li>
-        </ul>
-      </nav>
-    </div>
-  </footer>
-  
-  <!-- External JS -->
-  <script src="script.js" defer></script>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">SIDER<span>.dev</span></div>
+                <p>&copy; 2025 SIDER.dev. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/your-code.js" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
 </body>
 </html>
