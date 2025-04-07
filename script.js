@@ -170,25 +170,65 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(scrollStyle);
     
-    // Form submission
-    const contactForm = document.getElementById('contact-form');
+    // Form submission to Google Forms
+const contactForm = document.getElementById('contact-form');
+contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
     
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Get form data
-        const formData = {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            subject: document.getElementById('subject').value,
-            message: document.getElementById('message').value
-        };
-        
-        // Here you would typically send the data to your server
-        // For demonstration, we'll just show an alert
+    // Get form data
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value;
+    
+    // Create iframe for submission (this avoids CORS issues)
+    const iframe = document.createElement('iframe');
+    iframe.name = 'hidden_iframe';
+    iframe.id = 'hidden_iframe';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+    
+    // Configure form for submission through iframe
+    const form = document.createElement('form');
+    form.action = 'https://docs.google.com/forms/d/e/1FAIpQLSfhJ2LTWXNthimVO_95hEy009Oq_BEhgaT0h7d6OZwODHFamA/formResponse';
+    form.method = 'post';
+    form.target = 'hidden_iframe';
+    
+    // Add form fields
+    const nameField = document.createElement('input');
+    nameField.type = 'text';
+    nameField.name = 'entry.2096363215';
+    nameField.value = name;
+    form.appendChild(nameField);
+    
+    const emailField = document.createElement('input');
+    emailField.type = 'text';
+    emailField.name = 'entry.1324022853';
+    emailField.value = email;
+    form.appendChild(emailField);
+    
+    const subjectField = document.createElement('input');
+    subjectField.type = 'text';
+    subjectField.name = 'entry.1233244212';
+    subjectField.value = subject;
+    form.appendChild(subjectField);
+    
+    const messageField = document.createElement('input');
+    messageField.type = 'text';
+    messageField.name = 'entry.234134559';
+    messageField.value = message;
+    form.appendChild(messageField);
+    
+    // Append form to document, submit it, and remove it
+    document.body.appendChild(form);
+    form.submit();
+    
+    // Show success message and reset form after a brief delay
+    setTimeout(function() {
+        document.body.removeChild(form);
+        document.body.removeChild(iframe);
         alert('Thank you for your message! We will get back to you soon.');
-        this.reset();
-    });
+        contactForm.reset();
+    }, 1000);
 });
-
 
