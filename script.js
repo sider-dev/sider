@@ -99,6 +99,11 @@ document.addEventListener('DOMContentLoaded', function() {
             title: 'Cybersecurity',
             description: 'Comprehensive security solutions to protect your digital assets and customer data.',
             icon: 'fa-solid fa-shield-halved'
+        },
+        {
+            title: 'Blockchain',
+            description: 'Secure, transparent blockchain solutions including smart contracts and decentralized applications for enhanced trust and immutability.',
+            icon: 'fa-solid fa-shield-halved'
         }
     ];
     
