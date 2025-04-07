@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(scrollStyle);
     
-    // Form submission to Google Forms
+    // Form submission
 const contactForm = document.getElementById('contact-form');
 contactForm.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -181,54 +181,39 @@ contactForm.addEventListener('submit', function(e) {
     const subject = document.getElementById('subject').value;
     const message = document.getElementById('message').value;
     
-    // Create iframe for submission (this avoids CORS issues)
-    const iframe = document.createElement('iframe');
-    iframe.name = 'hidden_iframe';
-    iframe.id = 'hidden_iframe';
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
+    // Button state update
+    const submitButton = document.querySelector('#contact-form button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = "Sending...";
     
-    // Configure form for submission through iframe
-    const form = document.createElement('form');
-    form.action = 'https://docs.google.com/forms/d/e/1FAIpQLSfhJ2LTWXNthimVO_95hEy009Oq_BEhgaT0h7d6OZwODHFamA/formResponse';
-    form.method = 'post';
-    form.target = 'hidden_iframe';
+    // Google Form submission URL (change from viewform to formResponse)
+    const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfhJ2LTWXNthimVO_95hEy009Oq_BEhgaT0h7d6OZwODHFamA/formResponse';
     
-    // Add form fields
-    const nameField = document.createElement('input');
-    nameField.type = 'text';
-    nameField.name = 'entry.2096363215';
-    nameField.value = name;
-    form.appendChild(nameField);
+    // Prepare Google Form data with the correct entry IDs
+    const googleFormData = new FormData();
+    googleFormData.append('entry.2096363215', name);
+    googleFormData.append('entry.1324022853', email);
+    googleFormData.append('entry.1233244212', subject);
+    googleFormData.append('entry.234134559', message);
     
-    const emailField = document.createElement('input');
-    emailField.type = 'text';
-    emailField.name = 'entry.1324022853';
-    emailField.value = email;
-    form.appendChild(emailField);
-    
-    const subjectField = document.createElement('input');
-    subjectField.type = 'text';
-    subjectField.name = 'entry.1233244212';
-    subjectField.value = subject;
-    form.appendChild(subjectField);
-    
-    const messageField = document.createElement('input');
-    messageField.type = 'text';
-    messageField.name = 'entry.234134559';
-    messageField.value = message;
-    form.appendChild(messageField);
-    
-    // Append form to document, submit it, and remove it
-    document.body.appendChild(form);
-    form.submit();
-    
-    // Show success message and reset form after a brief delay
-    setTimeout(function() {
-        document.body.removeChild(form);
-        document.body.removeChild(iframe);
+    // Submit to Google Forms using fetch with no-cors mode
+    fetch(googleFormUrl, {
+        method: 'POST',
+        mode: 'no-cors', // Required for cross-domain requests
+        body: googleFormData
+    })
+    .then(() => {
+        // Success message - note: with no-cors we can't actually check the response
         alert('Thank you for your message! We will get back to you soon.');
         contactForm.reset();
-    }, 1000);
+    })
+    .catch(error => {
+        console.error('Error submitting form:', error);
+        alert('Something went wrong. Please try again later.');
+    })
+    .finally(() => {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.textContent = "Submit";
+    });
 });
-
