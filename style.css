@@ -1,0 +1,531 @@
+/* ---===[ Variables & Basic Setup ]===--- */
+:root {
+    --color-primary: #007bff; /* Example Blue */
+    --color-secondary: #6c757d; /* Example Gray */
+    --color-background: #ffffff;
+    --color-background-alt: #f8f9fa; /* Light gray for alternating sections */
+    --color-text: #495057;
+    --color-headings: #212529;
+    --color-border: #dee2e6;
+    --color-white: #fff;
+    --color-black: #000;
+    --font-primary: 'Inter', sans-serif;
+    --base-font-size: 16px;
+    --transition-speed: 0.3s;
+    --container-width: 1140px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: var(--base-font-size); /* Base for REM units */
+}
+
+body {
+    font-family: var(--font-primary);
+    color: var(--color-text);
+    background-color: var(--color-background);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---===[ Utility Classes ]===--- */
+.container {
+    max-width: var(--container-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Basic Fade-in (Can be enhanced with JS Intersection Observer later) */
+.fade-in {
+    opacity: 0;
+    animation: fadeInAnimation 0.8s ease-out forwards;
+}
+
+@keyframes fadeInAnimation {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Add delays if needed using data-wow-delay in HTML (requires JS or manual CSS) */
+/* Example: [data-wow-delay="0.2s"] { animation-delay: 0.2s; } */
+
+/* ---===[ Typography ]===--- */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-headings);
+    font-weight: 600; /* Semibold */
+    line-height: 1.3;
+    margin-bottom: 0.75em;
+}
+
+h1 { font-size: 2.8rem; font-weight: 700; } /* Bold */
+h2 { font-size: 2.2rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.2rem; }
+
+p {
+    margin-bottom: 1rem;
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--transition-speed) ease;
+}
+
+a:hover {
+    color: darken(var(--color-primary), 10%);
+    text-decoration: none; /* Optional: underline on hover */
+}
+
+/* ---===[ Buttons & Links ]===--- */
+.btn {
+    display: inline-block;
+    padding: 0.8em 1.8em;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    font-weight: 500; /* Medium */
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    font-size: 0.95rem;
+    margin: 5px;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+    background-color: darken(var(--color-primary), 10%);
+    border-color: darken(var(--color-primary), 10%);
+    color: var(--color-white);
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    border-color: var(--color-secondary);
+}
+
+.btn-secondary:hover {
+    background-color: darken(var(--color-secondary), 10%);
+    border-color: darken(var(--color-secondary), 10%);
+    color: var(--color-white);
+}
+
+.link-arrow {
+    display: inline-block;
+    font-weight: 500;
+    margin-top: 0.5rem;
+}
+
+.link-arrow::after {
+    content: ' →';
+    transition: transform var(--transition-speed) ease;
+    display: inline-block;
+}
+
+.link-arrow:hover::after {
+    transform: translateX(4px);
+}
+
+
+/* ---===[ Header & Navigation ]===--- */
+.site-header {
+    background-color: var(--color-white);
+    padding: 1rem 0;
+    position: fixed; /* Fixed Header */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: var(--shadow-sm);
+    transition: padding var(--transition-speed) ease;
+}
+
+.site-header.sticky { /* Style for when scrolled */
+    padding: 0.5rem 0;
+    box-shadow: var(--shadow-md);
+}
+
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-logo a {
+    display: block;
+}
+
+/* Basic Placeholder SVG Styling */
+.binary-logo-svg {
+    height: 30px; /* Adjust as needed */
+    width: auto;
+    vertical-align: middle;
+}
+.binary-logo-svg text {
+    font-family: monospace; /* Or a suitable font */
+    font-size: 8px;
+    fill: var(--color-secondary);
+}
+.binary-logo-svg .b1 { fill: var(--color-headings); } /* Style for '1' */
+.binary-logo-svg .b0 { fill: var(--color-secondary); } /* Style for '0' */
+
+
+.main-nav ul, .mobile-nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.main-nav li, .mobile-nav li {
+    margin-left: 1.8rem;
+}
+
+.main-nav a, .mobile-nav a {
+    color: var(--color-text);
+    font-weight: 500; /* Medium */
+    padding: 0.5rem 0;
+    position: relative;
+    transition: color var(--transition-speed) ease;
+}
+
+.main-nav a::after { /* Underline effect */
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-primary);
+    transition: width var(--transition-speed) ease;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+    color: var(--color-primary);
+}
+
+.main-nav a:hover::after,
+.main-nav a.active::after {
+    width: 100%;
+}
+
+/* Mobile Navigation Specifics */
+.mobile-nav-toggle {
+    display: none; /* Hidden by default, shown via media query */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1001; /* Above header content */
+}
+
+.mobile-nav-toggle svg {
+    width: 28px;
+    height: 28px;
+    stroke: var(--color-headings);
+}
+
+.mobile-nav {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 100%; /* Position below header */
+    left: 0;
+    width: 100%;
+    background-color: var(--color-white);
+    box-shadow: var(--shadow-md);
+    padding: 1rem 0;
+    border-top: 1px solid var(--color-border);
+}
+
+.mobile-nav.is-active {
+    display: block; /* Show when active */
+}
+
+
+.mobile-nav ul {
+    flex-direction: column;
+    align-items: center;
+}
+
+.mobile-nav li {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.mobile-nav a {
+    display: block;
+    padding: 0.8rem 1rem;
+    width: 100%;
+    border-bottom: 1px solid var(--color-border);
+}
+.mobile-nav li:last-child a {
+    border-bottom: none;
+}
+
+.mobile-nav a:hover,
+.mobile-nav a.active {
+     color: var(--color-primary);
+     background-color: var(--color-background-alt);
+}
+
+/* ---===[ Main Content Sections ]===--- */
+main {
+    padding-top: 70px; /* Adjust based on final fixed header height */
+}
+
+.section {
+    padding: 80px 0;
+}
+
+.section-alt {
+    background-color: var(--color-background-alt);
+}
+
+.section-heading {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-heading h2 {
+    margin-bottom: 0.5rem;
+}
+
+.section-heading p {
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.1rem;
+    color: var(--color-secondary);
+}
+
+
+/* ---===[ Hero Section ]===--- */
+.hero {
+    background-color: var(--color-background); /* Or a gradient/image */
+    padding: 120px 0 100px; /* More padding for hero */
+    text-align: center;
+    /* Add background image/gradient styles here if desired */
+}
+
+.hero h1 {
+    margin-bottom: 1rem;
+}
+
+.hero .subtitle {
+    font-size: 1.2rem;
+    color: var(--color-secondary);
+    max-width: 700px;
+    margin: 0 auto 2rem auto;
+}
+
+.hero-actions {
+    margin-top: 2rem;
+}
+
+/* ---===[ Services & Why Us Grids ]===--- */
+.services-grid, .why-us-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+    gap: 30px;
+}
+
+.service-card, .feature-item {
+    background-color: var(--color-white);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+    border: 1px solid var(--color-border);
+    text-align: left; /* Default align for cards */
+}
+.section-alt .service-card { /* Ensure cards stand out on alt background */
+     background-color: var(--color-white);
+}
+
+.service-card:hover, .feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.service-icon, .feature-icon {
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+.service-icon svg, .feature-icon svg {
+    width: 40px;
+    height: 40px;
+}
+
+.service-card h3, .feature-item h4 {
+    margin-bottom: 0.5rem;
+}
+
+/* ---===[ Contact Section ]===--- */
+.contact-wrapper {
+    display: grid;
+    grid-template-columns: 1fr; /* Default single column */
+    gap: 40px;
+    align-items: start; /* Align items to the top */
+}
+
+@media (min-width: 768px) {
+    .contact-wrapper {
+        grid-template-columns: 1fr 1.5fr; /* Two columns on larger screens */
+    }
+}
+
+.contact-info h3 {
+    margin-bottom: 1rem;
+}
+
+.contact-info p {
+    margin-bottom: 0.8rem;
+}
+
+.contact-info strong {
+    color: var(--color-headings);
+}
+
+.contact-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.contact-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--color-headings);
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 0, 123, 255), 0.25); /* Add --color-primary-rgb if needed */
+}
+
+textarea.form-control {
+    resize: vertical; /* Allow vertical resize only */
+    min-height: 120px;
+}
+
+.form-submit-btn {
+    text-align: left; /* Or center/right as needed */
+}
+
+/* ---===[ Footer ]===--- */
+.site-footer {
+    background-color: var(--color-headings); /* Darker footer */
+    color: rgba(255, 255, 255, 0.7);
+    padding: 30px 0;
+    font-size: 0.9rem;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.footer-links li {
+    margin-left: 1.5rem;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-links a:hover {
+    color: var(--color-white);
+}
+
+
+/* ---===[ Responsive Design ]===--- */
+
+/* Adjust container width */
+@media (max-width: 1200px) {
+    .container { max-width: 960px; }
+}
+@media (max-width: 992px) {
+    .container { max-width: 720px; }
+    h1 { font-size: 2.4rem; }
+    h2 { font-size: 2rem; }
+    .section { padding: 60px 0; }
+    .hero { padding: 100px 0 80px; }
+    main { padding-top: 60px; } /* Adjust for potentially smaller header */
+}
+
+@media (max-width: 768px) {
+    .container { max-width: 540px; }
+    body { font-size: 15px; } /* Slightly smaller base font */
+    h1 { font-size: 2.1rem; }
+    h2 { font-size: 1.8rem; }
+
+    /* Mobile Navigation Activation */
+    .main-nav { display: none; }
+    .mobile-nav-toggle { display: block; }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-links {
+        margin-top: 1rem;
+    }
+     .footer-links li {
+        margin: 0 0.75rem; /* Adjust spacing for centered footer links */
+    }
+}
+
+@media (max-width: 576px) {
+    .container { padding-left: 10px; padding-right: 10px; } /* Less padding on very small screens */
+    .hero h1 { font-size: 1.9rem; }
+    .hero .subtitle { font-size: 1.1rem; }
+    .btn { padding: 0.7em 1.5em; font-size: 0.9rem; }
+    .services-grid, .why-us-grid { gap: 20px; }
+    .service-card, .feature-item { padding: 20px; }
+    .contact-wrapper { grid-template-columns: 1fr; } /* Ensure single column */
+}
