@@ -1,4 +1,4 @@
-// Mobile Navigation Toggle
+// Mobile Navigation Toggle & Current Year Setup
 document.addEventListener('DOMContentLoaded', function () {
   const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
   const mobileNavMenu = document.getElementById('mobile-nav-menu');
