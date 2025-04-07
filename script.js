@@ -171,51 +171,22 @@ document.addEventListener('DOMContentLoaded', function() {
     document.head.appendChild(scrollStyle);
     
     // Form submission
-const contactForm = document.getElementById('contact-form');
-contactForm.addEventListener('submit', function(e) {
-    e.preventDefault();
+    const contactForm = document.getElementById('contact-form');
     
-    // Get form data
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const subject = document.getElementById('subject').value;
-    const message = document.getElementById('message').value;
-    
-    // Create Google Form submission URL
-    const formId = '1FAIpQLSfhJ2LTWXNthimVO_95hEy009Oq_BEhgaT0h7d6OZwODHFamA';
-    const formUrl = `https://docs.google.com/forms/d/e/${formId}/formResponse`;
-    
-    // Create form data with the correct entry IDs
-    const formData = new FormData();
-    formData.append('entry.2096363215', name);
-    formData.append('entry.1324022853', email);
-    formData.append('entry.1233244212', subject);
-    formData.append('entry.234134559', message);
-    
-    // Send data to Google Forms using a hidden iframe to avoid CORS issues
-    const iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-    
-    // Create a form within the iframe
-    const formInIframe = document.createElement('form');
-    formInIframe.method = 'POST';
-    formInIframe.action = formUrl;
-    
-    // Add form data to the iframe form
-    for (const [key, value] of formData.entries()) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = value;
-        formInIframe.appendChild(input);
-    }
-    
-    // Append the form to the iframe and submit
-    iframe.contentDocument.body.appendChild(formInIframe);
-    formInIframe.submit();
-    
-    // Show success message
-    alert('Thank you for your message! We will get back to you soon.');
-    this.reset();
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            subject: document.getElementById('subject').value,
+            message: document.getElementById('message').value
+        };
+        
+        // Here you would typically send the data to your server
+        // For demonstration, we'll just show an alert
+        alert('Thank you for your message! We will get back to you soon.');
+        this.reset();
+    });
 });
