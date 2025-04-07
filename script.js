@@ -170,16 +170,25 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(scrollStyle);
     
-// Form submission
-const contactForm = document.getElementById('contact-form');
-contactForm.addEventListener('submit', function(e) {
-    // We'll let the form submit naturally to Google Forms
-    // But we can still do things before submission
-    console.log('Form submitted to Google Forms');
+    // Form submission
+    const contactForm = document.getElementById('contact-form');
     
-    // Optional: Show a confirmation message
-    alert('Thank you for your message! We will get back to you soon.');
-    
-    // The form will automatically reset after submission
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            subject: document.getElementById('subject').value,
+            message: document.getElementById('message').value
+        };
+        
+        // Here you would typically send the data to your server
+        // For demonstration, we'll just show an alert
+        alert('Thank you for your message! We will get back to you soon.');
+        this.reset();
+    });
 });
+
 
