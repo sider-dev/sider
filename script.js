@@ -171,49 +171,58 @@ document.addEventListener('DOMContentLoaded', function() {
     document.head.appendChild(scrollStyle);
     
     // Form submission
-const contactForm = document.getElementById('contact-form');
-contactForm.addEventListener('submit', function(e) {
-    e.preventDefault();
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contact-form');
     
-    // Get form data
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const subject = document.getElementById('subject').value;
-    const message = document.getElementById('message').value;
-    
-    // Button state update
-    const submitButton = document.querySelector('#contact-form button[type="submit"]');
-    submitButton.disabled = true;
-    submitButton.textContent = "Sending...";
-    
-    // Google Form submission URL (change from viewform to formResponse)
-    const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfhJ2LTWXNthimVO_95hEy009Oq_BEhgaT0h7d6OZwODHFamA/formResponse';
-    
-    // Prepare Google Form data with the correct entry IDs
-    const googleFormData = new FormData();
-    googleFormData.append('entry.2096363215', name);
-    googleFormData.append('entry.1324022853', email);
-    googleFormData.append('entry.1233244212', subject);
-    googleFormData.append('entry.234134559', message);
-    
-    // Submit to Google Forms using fetch with no-cors mode
-    fetch(googleFormUrl, {
-        method: 'POST',
-        mode: 'no-cors', // Required for cross-domain requests
-        body: googleFormData
-    })
-    .then(() => {
-        // Success message - note: with no-cors we can't actually check the response
-        alert('Thank you for your message! We will get back to you soon.');
-        contactForm.reset();
-    })
-    .catch(error => {
-        console.error('Error submitting form:', error);
-        alert('Something went wrong. Please try again later.');
-    })
-    .finally(() => {
-        // Reset button state
-        submitButton.disabled = false;
-        submitButton.textContent = "Submit";
-    });
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            // Prevent default form submission - must be first
+            e.preventDefault();
+            
+            // Get form data
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // Button state update
+            const submitButton = document.querySelector('#contact-form button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = "Sending...";
+            
+            // Google Form submission URL (change from viewform to formResponse)
+            const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfhJ2LTWXNthimVO_95hEy009Oq_BEhgaT0h7d6OZwODHFamA/formResponse';
+            
+            // Create iframe for submission (workaround for CORS)
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            
+            // Create form inside iframe
+            const formHtml = `
+                <form method="POST" action="${googleFormUrl}">
+                    <input type="text" name="entry.2096363215" value="${name}">
+                    <input type="email" name="entry.1324022853" value="${email}">
+                    <input type="text" name="entry.1233244212" value="${subject}">
+                    <textarea name="entry.234134559">${message}</textarea>
+                </form>
+            `;
+            
+            // Submit the form
+            iframe.contentWindow.document.open();
+            iframe.contentWindow.document.write(formHtml);
+            iframe.contentWindow.document.querySelector('form').submit();
+            
+            // Show success message
+            setTimeout(() => {
+                alert('Thank you for your message! We will get back to you soon.');
+                contactForm.reset();
+                submitButton.disabled = false;
+                submitButton.textContent = "Send Message";
+                document.body.removeChild(iframe);
+            }, 2000);
+        });
+    } else {
+        console.error('Contact form not found in the document');
+    }
 });
