@@ -520,3 +520,76 @@ footer {
         padding: 2rem;
     }
 }
+
+.code-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.code-editor {
+  background-color: rgba(40, 44, 52, 0.85);
+  color: #abb2bf;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  height: 70vh;
+  overflow: auto;
+  white-space: pre;
+  line-height: 1.5;
+  font-size: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Update hero section styling */
+.hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  background: #252830; /* Dark background for code editor aesthetic */
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  color: white; /* Better contrast against dark background */
+  max-width: 800px;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  padding: 2rem;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+}
+
+/* Syntax highlighting */
+.language-javascript .keyword { color: #c678dd; }
+.language-javascript .string { color: #98c379; }
+.language-javascript .comment { color: #5c6370; font-style: italic; }
+.language-javascript .function { color: #61afef; }
+
+.language-python .keyword { color: #c678dd; }
+.language-python .string { color: #98c379; }
+.language-python .comment { color: #5c6370; font-style: italic; }
+.language-python .function { color: #61afef; }
+
+.language-java .keyword { color: #c678dd; }
+.language-java .string { color: #98c379; }
+.language-java .comment { color: #5c6370; font-style: italic; }
+.language-java .class { color: #e5c07b; }
+
+.language-swift .keyword { color: #c678dd; }
+.language-swift .string { color: #98c379; }
+.language-swift .comment { color: #5c6370; font-style: italic; }
+.language-swift .type { color: #e5c07b; }
+
