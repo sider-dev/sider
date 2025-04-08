@@ -129,7 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 navLinks.classList.remove('active');
                 document.body.style.overflow = '';
             }
-            // Smooth scroll handled by default browser behavior or scrollToElement if needed
         });
     });
 
@@ -153,23 +152,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const scrollY = window.pageYOffset;
 
         sections.forEach(section => {
-             // Adjust top offset calculation for accuracy
             const sectionTop = section.offsetTop - navHeight - 50; // Extra buffer
             const sectionBottom = sectionTop + section.offsetHeight;
 
-            // Check if the section is significantly in view
             if (scrollY >= sectionTop && scrollY < sectionBottom) {
                 current = section.getAttribute('id');
             }
         });
 
-        // Handle edge case when scrolled to the very bottom
         if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
             const lastSectionId = sections[sections.length - 1]?.getAttribute('id');
             if(lastSectionId) current = lastSectionId;
         }
 
-         // Handle edge case when scrolled to the very top
          if (scrollY < sections[0].offsetTop - navHeight - 50) {
              current = 'home';
          }
@@ -187,7 +182,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // --- Enhanced Matrix Rain Animation (Canvas) ---
-    // (Keep the existing Matrix code here - no changes needed for voice/read)
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     let width = canvas.width = window.innerWidth;
@@ -256,7 +250,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // --- Service Cards Data & Population ---
-    // (Keep the existing service card code - no changes needed for voice/read)
      const services = [
         { title: 'Mobile Applications', description: 'Native & cross-platform apps delivering exceptional UX across all devices.', icon: 'fa-solid fa-mobile-screen-button' },
         { title: 'Web Development', description: 'Responsive, high-performance websites and complex web applications.', icon: 'fa-solid fa-code' },
@@ -272,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (servicesGrid) {
         services.forEach(service => {
             const serviceCard = document.createElement('div');
-            serviceCard.classList.add('service-card', 'fade-in');
+            serviceCard.classList.add('service-card', 'fade-in'); // Add fade-in class for animation
             serviceCard.innerHTML = `
                 <div class="icon"><i class="${service.icon}"></i></div>
                 <h3>${service.title}</h3>
@@ -286,33 +279,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // --- Scroll Animations (Staggered Fade-In) ---
-    // (Keep the existing IntersectionObserver code - no changes needed)
     const observerOptions = { root: null, threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
     const observerCallback = (entries, observer) => {
         entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
                 const parent = entry.target.parentElement;
                 let itemIndex = 0;
-                if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('features-grid'))) {
-                   itemIndex = Array.from(parent.children).indexOf(entry.target);
-                }
-                const delay = itemIndex * 100;
+                // Check if parent is one of the grids to calculate index correctly
+                 if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('features-grid'))) {
+                    itemIndex = Array.from(parent.children).filter(child => child.classList.contains(entry.target.classList[0])).indexOf(entry.target);
+                 } else if (parent && parent.classList.contains('contact-wrapper')) {
+                     // Handle direct children of contact-wrapper (like contact-info, office-locations)
+                     itemIndex = Array.from(parent.children).filter(child => child.classList.contains('fade-in')).indexOf(entry.target);
+                 }
+
+
+                const delay = itemIndex * 100; // Stagger delay in ms
                 entry.target.style.transitionDelay = `${delay}ms`;
                 entry.target.classList.add('in-view');
-                observer.unobserve(entry.target);
+                observer.unobserve(entry.target); // Stop observing once animated
             }
         });
     };
     const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
+    // Observe all elements initially marked with 'fade-in'
     document.querySelectorAll('.fade-in').forEach(el => scrollObserver.observe(el));
-    document.querySelectorAll('.section-header').forEach(el => {
-         el.classList.add('fade-in');
-         scrollObserver.observe(el);
+     // Also observe section headers (if they weren't already marked with fade-in)
+     document.querySelectorAll('.section-header').forEach(el => {
+         if (!el.classList.contains('fade-in')) {
+             el.classList.add('fade-in');
+             scrollObserver.observe(el);
+         }
      });
 
 
     // --- Form Submission Placeholder ---
-    // (Keep existing form code - no changes needed)
     const contactForm = document.getElementById('contact-form');
      if (contactForm) {
         const submitButton = contactForm.querySelector('.submit-btn');
@@ -337,23 +338,18 @@ document.addEventListener('DOMContentLoaded', function() {
             voiceNavBtn.classList.add('listening');
             voiceNavBtn.setAttribute('aria-label', 'Stop Listening');
             voiceNavBtn.title = 'Stop Listening';
-            // Optional: Change icon
-            // voiceNavBtn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i>';
         } else {
             voiceNavBtn.classList.remove('listening');
             voiceNavBtn.setAttribute('aria-label', 'Activate Voice Navigation');
              voiceNavBtn.title = 'Activate Voice Navigation';
-            // Optional: Change icon back
-            // voiceNavBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
         }
     }
 
     function startListening() {
         if (!recognition || isListening) return;
 
-        // Stop speaking if it's active
         if (isSpeaking) {
-            stopSpeaking();
+            stopSpeaking(); // Stop speaking before listening
         }
 
         try {
@@ -362,14 +358,14 @@ document.addEventListener('DOMContentLoaded', function() {
             updateVoiceNavButtonState();
             console.log("Speech recognition started.");
         } catch (error) {
-            // Catch potential errors like starting too soon after stopping
             console.error("Error starting recognition:", error);
              isListening = false;
              updateVoiceNavButtonState();
              if (error.name === 'NotAllowedError') {
                  alert("Microphone access denied. Please allow microphone access in your browser settings.");
              } else if (error.name === 'InvalidStateError'){
-                 // Ignore if it's already started or stopping
+                // Can happen if start() is called again too quickly
+                console.warn("Recognition already processing.");
              } else {
                  alert("Could not start voice recognition. Please try again.");
              }
@@ -378,14 +374,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function stopListening() {
         if (!recognition || !isListening) return;
-        recognition.stop();
-        isListening = false;
-        updateVoiceNavButtonState();
-        console.log("Speech recognition stopped.");
+        recognition.stop(); // This will trigger the onend event
+        // State update happens in onend
     }
 
     if (recognition) {
-        recognition.continuous = false; // Listen for a single command
+        recognition.continuous = false;
         recognition.lang = 'en-US';
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
@@ -394,12 +388,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const command = event.results[0][0].transcript.toLowerCase().trim();
             console.log('Voice command received:', command);
             processVoiceCommand(command);
-            // Stop listening automatically after processing a command
-             stopListening();
+            // Stop listening state *after* processing command
+            // recognition.stop() might have already been called by onspeechend
+            if (isListening) {
+                 isListening = false;
+                 updateVoiceNavButtonState();
+            }
         };
 
         recognition.onspeechend = () => {
             console.log("Speech ended.");
+            // Don't necessarily stop listening here, wait for result or error
              stopListening(); // Stop if user stops talking
         };
 
@@ -412,16 +411,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 errorMsg = "Microphone problem. Please check your microphone.";
             } else if (event.error === 'not-allowed') {
                 errorMsg = "Microphone access denied.";
-                alert("Microphone access is needed for voice navigation. Please allow access in browser settings.");
+                // Avoid alert here as permission prompt should handle it
             }
-             speakFeedback(errorMsg); // Give audible feedback
-             stopListening(); // Ensure state is reset
+             speakFeedback(errorMsg);
+             if (isListening) { // Only stop if it thinks it's listening
+                 isListening = false;
+                 updateVoiceNavButtonState();
+             }
         };
 
          recognition.onend = () => {
              console.log("Recognition service ended.");
-             // Ensure button state is correct if stopped unexpectedly
-             if (isListening) { // Check flag before resetting
+             // Ensure button state is correct if stopped for any reason
+             if (isListening) {
                  isListening = false;
                  updateVoiceNavButtonState();
              }
@@ -439,17 +441,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function processVoiceCommand(command) {
         console.log(`Processing command: "${command}"`);
 
-        // Basic Navigation
         if (command.includes('home') || command.includes('top')) {
             scrollToElement('home');
         } else if (command.includes('service')) {
             scrollToElement('services');
         } else if (command.includes('why') || command.includes('about')) {
             scrollToElement('why-sider');
-        } else if (command.includes('contact') || command.includes('touch')) {
+        } else if (command.includes('contact') || command.includes('touch') || command.includes('location')) {
             scrollToElement('contact');
         }
-        // Scrolling
         else if (command.includes('scroll down')) {
             window.scrollBy({ top: window.innerHeight * 0.7, behavior: 'smooth' });
             console.log("Scrolling down");
@@ -457,11 +457,10 @@ document.addEventListener('DOMContentLoaded', function() {
             window.scrollBy({ top: -window.innerHeight * 0.7, behavior: 'smooth' });
             console.log("Scrolling up");
         }
-         // Theme Switching
          else if (command.includes('dark mode') || command.includes('night mode')) {
              if (document.documentElement.getAttribute('data-theme') !== 'dark') {
                 themeCheckbox.checked = false;
-                themeCheckbox.dispatchEvent(new Event('change')); // Trigger change event
+                themeCheckbox.dispatchEvent(new Event('change'));
                 speakFeedback("Switched to dark mode.");
              } else {
                  speakFeedback("Already in dark mode.");
@@ -469,23 +468,20 @@ document.addEventListener('DOMContentLoaded', function() {
          } else if (command.includes('light mode') || command.includes('day mode')) {
              if (document.documentElement.getAttribute('data-theme') !== 'light') {
                  themeCheckbox.checked = true;
-                 themeCheckbox.dispatchEvent(new Event('change')); // Trigger change event
+                 themeCheckbox.dispatchEvent(new Event('change'));
                 speakFeedback("Switched to light mode.");
              } else {
                  speakFeedback("Already in light mode.");
              }
          }
-        // Reading
         else if (command.includes('read') || command.includes('speak')) {
              handleReadPage();
         }
-         // Stop command
          else if (command.includes('stop') || command.includes('cancel') || command.includes('shut up')) {
              if (isSpeaking) stopSpeaking();
-             if (isListening) stopListening(); // Also stop listening if told to stop
-             speakFeedback("Okay."); // Optional feedback
+             if (isListening) stopListening();
+             speakFeedback("Okay.");
          }
-        // Unknown command
         else {
             speakFeedback("Sorry, I didn't understand that command.");
             console.log("Unknown command:", command);
@@ -500,13 +496,11 @@ document.addEventListener('DOMContentLoaded', function() {
             readPageBtn.classList.add('speaking');
             readPageBtn.setAttribute('aria-label', 'Stop Reading');
             readPageBtn.title = 'Stop Reading';
-            // Optional: Change icon
              readPageBtn.innerHTML = '<i class="fa-solid fa-stop-circle"></i>';
         } else {
             readPageBtn.classList.remove('speaking');
             readPageBtn.setAttribute('aria-label', 'Read Page Content');
             readPageBtn.title = 'Read Page Content';
-            // Optional: Change icon back
              readPageBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
         }
     }
@@ -514,34 +508,37 @@ document.addEventListener('DOMContentLoaded', function() {
     function findVisibleSectionForReading() {
         let mostVisibleSection = null;
         let maxVisibility = 0;
+        const navOffset = navHeight + 10; // Consider space below nav
 
         document.querySelectorAll('section[id][data-readable-section="true"]').forEach(section => {
             const rect = section.getBoundingClientRect();
             const windowHeight = window.innerHeight;
 
-            // Calculate visible height
-            const visibleTop = Math.max(0, rect.top);
+            // Calculate visible portion considering nav bar
+            const visibleTop = Math.max(navOffset, rect.top); // Start check below nav
             const visibleBottom = Math.min(windowHeight, rect.bottom);
             const visibleHeight = Math.max(0, visibleBottom - visibleTop);
 
-             // Calculate percentage visibility
-             const sectionHeight = rect.height;
-             const visibilityPercentage = sectionHeight > 0 ? (visibleHeight / sectionHeight) * 100 : 0;
+            // Calculate percentage visibility based on the part below the nav
+            const sectionHeightBelowNav = Math.max(0, rect.bottom - navOffset);
+            const visibilityPercentage = sectionHeightBelowNav > 0 ? (visibleHeight / sectionHeightBelowNav) * 100 : 0;
 
-            // Check if this section is more visible than the current max
-            // Prioritize sections that are at least partially visible and take up a good portion of viewport
+            // Prioritize section most visible *below the navbar*
             if (visibleHeight > 0 && visibilityPercentage > maxVisibility) {
-                // Basic check: is at least 10% visible OR takes up 30% of viewport?
-                if (visibilityPercentage > 10 || visibleHeight / windowHeight > 0.3) {
+                // Check if it's significantly visible (e.g., > 20% of its height below nav)
+                 if (visibilityPercentage > 20) {
                      maxVisibility = visibilityPercentage;
                      mostVisibleSection = section;
-                }
+                 }
             }
         });
 
-         // Fallback to the first section if nothing else is clearly visible (e.g., top of page)
-        if (!mostVisibleSection && window.pageYOffset < window.innerHeight * 0.5) {
-             mostVisibleSection = document.querySelector('section[id][data-readable-section="true"]');
+        // Fallback: If nothing clearly below nav, check if *any* part of first section is visible
+        if (!mostVisibleSection && sections.length > 0) {
+            const firstSectionRect = sections[0].getBoundingClientRect();
+             if (firstSectionRect.bottom > navOffset && firstSectionRect.top < window.innerHeight) {
+                 mostVisibleSection = sections[0];
+             }
         }
 
         return mostVisibleSection;
@@ -550,25 +547,32 @@ document.addEventListener('DOMContentLoaded', function() {
      function extractReadableText(sectionElement) {
          if (!sectionElement) return "";
          let text = "";
-         // Find elements marked specifically for reading within the section
          const readableElements = sectionElement.querySelectorAll('[data-readable-content="true"]');
 
          if (readableElements.length > 0) {
              readableElements.forEach(el => {
-                 // Simple approach: get innerText, clean up whitespace
-                 const elementText = el.innerText || el.textContent || "";
-                 text += elementText.replace(/\s+/g, ' ').trim() + ". "; // Add period for sentence breaks
+                 // Clone node to avoid modifying the original DOM (e.g., removing hidden elements)
+                 const clone = el.cloneNode(true);
+                 // Remove potentially noisy elements (buttons, icons explicitly inside readable content)
+                 clone.querySelectorAll('button, .icon, .icon-wrapper, .btn, a.contact-link').forEach(noisyEl => noisyEl.remove());
+                 const elementText = clone.innerText || clone.textContent || "";
+                 text += elementText.replace(/\s+/g, ' ').trim() + ". ";
              });
          } else {
-             // Fallback: Read the whole section's text if no specific elements marked
-             // Be cautious, this might include unwanted text (buttons, etc.)
-              console.warn(`No elements with data-readable-content found in #${sectionElement.id}. Reading entire section (may be noisy).`);
-              text = sectionElement.innerText || sectionElement.textContent || "";
+              console.warn(`No elements with data-readable-content found in #${sectionElement.id}. Reading fallback text.`);
+              const clone = sectionElement.cloneNode(true);
+              clone.querySelectorAll('button, .icon, .icon-wrapper, .btn, canvas, script, style, .decorative-shape, nav').forEach(noisyEl => noisyEl.remove());
+              text = clone.innerText || clone.textContent || "";
               text = text.replace(/\s+/g, ' ').trim();
          }
-
-         // Further clean-up (optional)
          text = text.replace(/\.\s*\./g, '.'); // Remove double periods
+
+         // Add section title if not already included
+         const sectionTitle = sectionElement.querySelector('h1, h2')?.innerText.trim();
+         if (sectionTitle && !text.toLowerCase().includes(sectionTitle.toLowerCase())) {
+             text = sectionTitle + ". " + text;
+         }
+
 
          return text;
      }
@@ -582,11 +586,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-         // Stop listening if active
         if (isListening) {
             stopListening();
         }
-
 
         const targetSection = findVisibleSectionForReading();
         if (!targetSection) {
@@ -597,17 +599,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const textToRead = extractReadableText(targetSection);
 
-        if (!textToRead || textToRead.length < 10) { // Avoid reading very short/empty strings
+        if (!textToRead || textToRead.length < 10) {
              console.log(`Section #${targetSection.id} has insufficient readable text.`);
-             speakFeedback(`There isn't much to read in the ${targetSection.id.replace(/-/g, ' ')} section.`);
+             const sectionName = targetSection.id.replace(/-/g, ' ');
+             speakFeedback(`There isn't much to read in the ${sectionName} section.`);
              return;
         }
 
         console.log(`Attempting to read section: #${targetSection.id}`);
         utterance.text = textToRead;
-        utterance.lang = 'en-US'; // Ensure language is set
-        utterance.rate = 1.0; // Normal speed
-        utterance.pitch = 1.0; // Normal pitch
+        utterance.lang = 'en-US';
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
 
         utterance.onstart = () => {
             isSpeaking = true;
@@ -628,17 +631,14 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("Sorry, an error occurred while trying to read the page.");
         };
 
-        // Cancel any previous utterance just in case
-        synthesis.cancel();
-        // Start speaking
+        synthesis.cancel(); // Cancel previous before speaking
         synthesis.speak(utterance);
     }
 
     function stopSpeaking() {
         if (!synthesis || !isSpeaking) return;
-        synthesis.cancel(); // Stop speaking immediately
-        isSpeaking = false;
-        updateReadButtonState();
+        synthesis.cancel();
+        // State update (isSpeaking=false, button update) handled by utterance.onend or utterance.onerror
         console.log("SpeechSynthesis stopped by user.");
     }
 
@@ -648,7 +648,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // --- Subtle Mouse Move Parallax Effect ---
-    // (Keep existing parallax code - no changes needed)
     const heroContent = document.querySelector('.hero-content');
     if (heroContent) {
         document.addEventListener('mousemove', (e) => {
@@ -657,7 +656,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const moveX = (clientX / innerWidth - 0.5) * 2;
             const moveY = (clientY / innerHeight - 0.5) * 2;
             const strength = 5;
-            heroContent.style.transform = `translate(${moveX * strength * -1}px, ${moveY * strength * -1}px)`;
+            // Apply with requestAnimationFrame for better performance
+             requestAnimationFrame(() => {
+                heroContent.style.transform = `translate(${moveX * strength * -1}px, ${moveY * strength * -1}px)`;
+             });
         });
     }
 
