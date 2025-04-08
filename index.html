@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light"> <!-- Added data-theme -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +7,20 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Using Poppins weights for hierarchy -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Placeholder for Custom Cursor Style -->
+    <style>
+      /* Basic Custom Cursor - Enhance as needed */
+      /* body.custom-cursor-active { cursor: none; } */
+      /* .custom-cursor { position: fixed; left: 0; top: 0; pointer-events: none; z-index: 9999; /* ... more styles */ } */
+    </style>
 </head>
-<body>
+<body > <!-- Removed custom-cursor-active initially -->
+    <!-- Custom Cursor Element (Optional) -->
+    <!-- <div class="custom-cursor"></div> -->
+
     <!-- Navigation -->
     <nav>
         <div class="container nav-container">
@@ -21,6 +31,30 @@
                 <li><a href="#why-sider">Why SIDER?</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
+            <div class="nav-controls">
+                <!-- Voice Control Placeholder Buttons -->
+                <button id="voice-nav-btn" class="icon-btn" aria-label="Activate Voice Navigation">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+                <button id="read-page-btn" class="icon-btn" aria-label="Read Page Content">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+
+                <!-- Theme Switch -->
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="theme-checkbox">
+                        <input type="checkbox" id="theme-checkbox" />
+                        <div class="slider round">
+                             <span class="icon sun"><i class="fa-solid fa-sun"></i></span>
+                             <span class="icon moon"><i class="fa-solid fa-moon"></i></span>
+                        </div>
+
+                    </label>
+                     <!-- Removed text label, icons added -->
+                </div>
+            </div>
+
+
             <div class="mobile-menu-btn">
                 <span></span>
                 <span></span>
@@ -31,11 +65,18 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="binary-animation" id="binary-animation"></div>
+        <!-- Replaced binary animation div with Canvas -->
+        <canvas id="matrix-canvas" class="matrix-canvas"></canvas>
         <div class="container hero-content">
-            <h1>Software Innovation & Digital Economy, Reimagined</h1>
-            <p>Propelling digital business forward through cutting-edge solutions and transformative technology</p>
-            <a href="#contact" class="btn primary-btn">Start Your Project with SIDER</a>
+            <!-- Increased heading weight -->
+            <h1 class="hero-title">Software Innovation & Digital Economy, <span>Reimagined</span></h1>
+            <p class="hero-subtitle">Propelling digital business forward through cutting-edge solutions and transformative technology</p>
+            <a href="#contact" class="btn primary-btn hero-cta">
+                Start Your Project
+                <span class="btn-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                 <!-- Added subtle loading spinner structure -->
+                 <span class="btn-loader"></span>
+            </a>
         </div>
     </section>
 
@@ -43,8 +84,8 @@
     <section id="services" class="services">
         <div class="container">
             <div class="section-header">
-                <h2>Our Services</h2>
-                <p>Comprehensive digital solutions tailored to your business needs</p>
+                <h2>Our Expertise</h2>
+                <p>Comprehensive digital solutions tailored to fuel your growth</p>
             </div>
             <div class="services-grid">
                 <!-- Service cards will be populated via JavaScript -->
@@ -54,70 +95,65 @@
 
     <!-- Why SIDER Section -->
     <section id="why-sider" class="why-us">
+         <!-- Subtle decorative shape -->
+        <div class="decorative-shape shape-1"></div>
         <div class="container">
             <div class="section-header">
-                <h2>Why SIDER?</h2>
-                <p>What sets us apart in the digital landscape</p>
+                <h2>Why Partner with SIDER?</h2>
+                <p>The strategic advantages that set us apart</p>
             </div>
             <div class="features-grid">
+                <!-- Feature cards updated slightly -->
                 <div class="feature-card">
-                    <div class="icon"><i class="fa-solid fa-users-gear"></i></div>
+                    <div class="icon-wrapper"><i class="fa-solid fa-users-gear"></i></div>
                     <h3>Expert Teams</h3>
-                    <p>Specialized developers with deep industry expertise working collaboratively to deliver exceptional results.</p>
+                    <p>Dedicated specialists with deep industry knowledge, delivering exceptional, collaborative results.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="icon"><i class="fa-solid fa-lightbulb"></i></div>
+                     <div class="icon-wrapper"><i class="fa-solid fa-lightbulb"></i></div>
                     <h3>Market Insight</h3>
-                    <p>Strategic understanding of digital trends to position your business ahead of the competition.</p>
+                    <p>Strategic understanding of digital trends to ensure your business leads, not follows.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="icon"><i class="fa-solid fa-gem"></i></div>
-                    <h3>Quality Focus</h3>
-                    <p>Rigorous testing and quality assurance processes ensuring reliable, high-performance solutions.</p>
+                     <div class="icon-wrapper"><i class="fa-solid fa-gem"></i></div>
+                    <h3>Quality Assurance</h3>
+                    <p>Rigorous testing and QA processes guarantee reliable, high-performance, secure solutions.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="icon"><i class="fa-solid fa-arrows-spin"></i></div>
+                    <div class="icon-wrapper"><i class="fa-solid fa-arrows-spin"></i></div>
                     <h3>Agile Collaboration</h3>
-                    <p>Flexible, transparent development approach with regular updates and adaptability to changing needs.</p>
+                    <p>Flexible, transparent development with continuous feedback and adaptability.</p>
                 </div>
             </div>
         </div>
+         <!-- Subtle decorative shape -->
+        <div class="decorative-shape shape-2"></div>
     </section>
 
     <!-- Contact Section -->
     <section id="contact" class="contact">
         <div class="container">
             <div class="section-header">
-                <h2>Get In Touch</h2>
-                <p>Ready to transform your digital strategy? Let's work together!</p>
+                <h2>Let's Innovate Together</h2>
+                <p>Ready to transform your digital presence? Reach out and let's discuss your vision.</p>
             </div>
             <div class="contact-wrapper">
+                <!-- Simplified Contact Info -->
                 <div class="contact-info">
-                    <div class="contact-item">
-                        <div class="icon"><i class="fa-solid fa-envelope"></i></div>
+                     <div class="contact-item">
+                        <div class="icon-wrapper"><i class="fa-solid fa-envelope-open-text"></i></div>
                         <div class="details">
-                            <h3>Email Us</h3>
-                            <p><a href="mailto:contact@sider.dev">contact@sider.dev</a></p>
-                        </div>
-                        <!--
-                    </div>
-                    <div class="contact-item">
-                        <div class="icon"><i class="fa-solid fa-phone"></i></div>
-                        <div class="details">
-                            <h3>Call Us</h3>
-                            <p>+1 (555) 123-4567</p>
+                            <h3>Email Us Directly</h3>
+                             <p><a href="mailto:contact@sider.dev" class="contact-link">contact@sider.dev</a></p>
                         </div>
                     </div>
-                    <div class="contact-item">
-                        <div class="icon"><i class="fa-solid fa-location-dot"></i></div>
-                        <div class="details">
-                            <h3>Visit Us</h3>
-                            <p>123 Innovation Drive, Tech City, TC 10101</p>
-                        </div>
-                    </div>
-                        
-               </div>
+                    <p class="contact-prompt">We typically respond within one business day.</p>
+                </div>
+
+                 <!-- Form commented out as per original structure -->
+                 <!--
                  <form id="contact-form" class="contact-form">
+                     <h2>Send Us a Message</h2>
                      <div class="form-group">
                          <input type="text" id="name" name="name" placeholder="Your Name" required>
                      </div>
@@ -128,12 +164,15 @@
                          <input type="text" id="subject" name="subject" placeholder="Subject">
                      </div>
                      <div class="form-group">
-                         <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+                         <textarea id="message" name="message" placeholder="How can we help?" required></textarea>
                      </div>
-                     <button type="submit" class="btn primary-btn">Send Message</button>
+                     <button type="submit" class="btn primary-btn submit-btn">
+                         Send Message
+                         <span class="btn-loader"></span>
+                    </button>
                  </form>
+                 -->
              </div>
-                -->   
         </div>
     </section>
 
@@ -142,12 +181,19 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">SIDER<span>.dev</span></div>
-                <p>&copy; 2025 SIDER.dev. All rights reserved.</p>
+                <p class="footer-tagline">Innovating the Digital Frontier.</p>
+                <div class="footer-links">
+                     <a href="#services">Services</a> |
+                     <a href="#why-sider">Why SIDER?</a> |
+                     <a href="#">Privacy Policy</a> <!-- Placeholder -->
+                </div>
+                <p class="copyright">© 2025 SIDER.dev. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script src="https://kit.fontawesome.com/your-code.js" crossorigin="anonymous"></script>
+    <!-- Font Awesome Kit (if you have one) or keep the CDN -->
+    <!-- <script src="https://kit.fontawesome.com/your-code.js" crossorigin="anonymous"></script> -->
     <script src="script.js"></script>
 </body>
 </html>
