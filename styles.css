@@ -903,13 +903,9 @@ footer {
 }
 
 .footer-content {
-    display: flex;
+    text-align: center;
     max-width: 800px;
     margin: 0 auto;
-    justify-content: space-between; /* Push items to opposite ends */
-    align-items: center;       /* Vertically align items in the middle */
-    flex-wrap: wrap;           /* Allow items to wrap on small screens */
-    
 }
 
 .footer-logo {
@@ -924,7 +920,6 @@ footer {
 }
 
 .footer-tagline {
-    text-align: center;
     font-size: 1.1rem;
     margin-bottom: 1.5rem;
     color: #c0c0c0;
@@ -946,13 +941,11 @@ footer {
 }
 
 .copyright {
-    text-align: center;
     font-size: 0.9rem;
     color: #a0a0a0;
     margin-top: 2rem;
     margin-bottom: 0;
 }
-
 
 /* Animations */
 @keyframes fadeInUp {
