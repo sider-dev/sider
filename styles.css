@@ -1,4 +1,61 @@
-/* Global Styles */
+/* Add these styles to your existing styles.css */
+
+/* Voice/Read Button States */
+.icon-btn {
+    position: relative; /* Needed for pseudo-elements */
+    transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.icon-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Listening State */
+.icon-btn.listening {
+    color: var(--secondary-color); /* Use accent color */
+    transform: scale(1.1); /* Slightly larger */
+}
+
+.icon-btn.listening::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    border: 2px solid var(--secondary-color);
+    opacity: 0.7;
+    animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    pointer-events: none; /* Don't block clicks */
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.7;
+    }
+    80%, 100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* Speaking State */
+.icon-btn.speaking {
+    color: var(--accent-color); /* Teal color */
+}
+.icon-btn.speaking i { /* Change icon maybe? */
+     /* Example: Change icon on speak */
+    /* content: "\f028"; /* Font Awesome volume up */
+}
+
+
+/* ... rest of your existing styles.css ... */
+
+
+/* Ensure you have the base :root variables and theme switching logic */
 :root {
     /* Core Palette */
     --primary-hue: 220; /* Blue */
@@ -374,19 +431,7 @@ nav {
     gap: 1rem;
 }
 
-.icon-btn {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: color var(--transition-fast);
-    padding: 0.5rem;
-}
-
-.icon-btn:hover {
-    color: var(--primary-color);
-}
+/* Icon Button defined earlier with states */
 
 
 /* Theme Switch */
@@ -979,10 +1024,6 @@ footer {
 
     /* Move Nav Controls into Mobile Menu or hide */
     .nav-controls {
-        /* Option 1: Hide */
-         /* display: none; */
-         /* Option 2: Move (Requires JS/HTML changes) */
-         /* For now, keep them visible but adjust layout if needed */
          margin-left: auto; /* Push controls to right before menu btn */
          margin-right: 1rem;
     }
@@ -1013,8 +1054,8 @@ footer {
 
     .contact-form { padding: 2rem; }
 
-    .nav-controls { gap: 0.2rem; } /* Smaller gap for icons */
-    .icon-btn { font-size: 1rem; padding: 0.3rem; }
+    .nav-controls { gap: 0.3rem; } /* Slightly more gap than before */
+    .icon-btn { font-size: 1.1rem; padding: 0.4rem; } /* Slightly bigger icons */
     .theme-switch { width: 50px; height: 28px; } /* Smaller switch */
     .slider:before { width: 20px; height: 20px; bottom: 4px; left: 4px; }
     input:checked + .slider:before { transform: translateX(22px); }
