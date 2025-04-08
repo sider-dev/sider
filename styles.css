@@ -906,6 +906,10 @@ footer {
     display: flex;
     max-width: 800px;
     margin: 0 auto;
+    justify-content: space-between; /* Push items to opposite ends */
+    align-items: center;       /* Vertically align items in the middle */
+    flex-wrap: wrap;           /* Allow items to wrap on small screens */
+    
 }
 
 .footer-logo {
