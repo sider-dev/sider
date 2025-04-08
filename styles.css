@@ -1,61 +1,4 @@
-/* Add these styles to your existing styles.css */
-
-/* Voice/Read Button States */
-.icon-btn {
-    position: relative; /* Needed for pseudo-elements */
-    transition: color var(--transition-fast), transform var(--transition-fast);
-}
-
-.icon-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Listening State */
-.icon-btn.listening {
-    color: var(--secondary-color); /* Use accent color */
-    transform: scale(1.1); /* Slightly larger */
-}
-
-.icon-btn.listening::after {
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    border-radius: 50%;
-    border: 2px solid var(--secondary-color);
-    opacity: 0.7;
-    animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-    pointer-events: none; /* Don't block clicks */
-}
-
-@keyframes pulse-ring {
-    0% {
-        transform: scale(0.8);
-        opacity: 0.7;
-    }
-    80%, 100% {
-        transform: scale(1.5);
-        opacity: 0;
-    }
-}
-
-/* Speaking State */
-.icon-btn.speaking {
-    color: var(--accent-color); /* Teal color */
-}
-.icon-btn.speaking i { /* Change icon maybe? */
-     /* Example: Change icon on speak */
-    /* content: "\f028"; /* Font Awesome volume up */
-}
-
-
-/* ... rest of your existing styles.css ... */
-
-
-/* Ensure you have the base :root variables and theme switching logic */
+/* Global Styles */
 :root {
     /* Core Palette */
     --primary-hue: 220; /* Blue */
@@ -431,7 +374,61 @@ nav {
     gap: 1rem;
 }
 
-/* Icon Button defined earlier with states */
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    padding: 0.5rem;
+    position: relative; /* Needed for pseudo-elements */
+}
+
+.icon-btn:hover:not(:disabled) {
+    color: var(--primary-color);
+}
+
+.icon-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Listening State */
+.icon-btn.listening {
+    color: var(--secondary-color); /* Use accent color */
+    transform: scale(1.1); /* Slightly larger */
+}
+
+.icon-btn.listening::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    border: 2px solid var(--secondary-color);
+    opacity: 0.7;
+    animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    pointer-events: none; /* Don't block clicks */
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.7;
+    }
+    80%, 100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* Speaking State */
+.icon-btn.speaking {
+    color: var(--accent-color); /* Teal color */
+}
 
 
 /* Theme Switch */
@@ -581,7 +578,6 @@ input:checked + .slider .icon.moon { opacity: 0;}
 .hero-title span { /* Style the 'Reimagined' part */
     color: var(--secondary-color);
     display: inline-block; /* Allows transform */
-    /* Add subtle animation/effect if desired */
 }
 
 .hero-subtitle {
@@ -607,7 +603,6 @@ input:checked + .slider .icon.moon { opacity: 0;}
 
 .services-grid {
     display: grid;
-    /* grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); */
      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); /* Improved responsive columns */
     gap: 2rem; /* Increased gap */
 }
@@ -746,8 +741,7 @@ input:checked + .slider .icon.moon { opacity: 0;}
     background: linear-gradient(135deg, hsla(var(--primary-hue), 90%, 60%, 0.2), hsla(var(--accent-hue), 100%, 45%, 0.2));
 }
 .feature-card:hover .icon-wrapper i {
-    /* Ensure icon is visible during rotation */
-    transform: rotateY(180deg);
+    transform: rotateY(180deg); /* Ensure icon is visible during rotation */
 }
 
 .feature-card h3 {
@@ -767,9 +761,9 @@ input:checked + .slider .icon.moon { opacity: 0;}
 
 .contact-wrapper {
     display: flex;
-    flex-direction: column; /* Stack info and form */
+    flex-direction: column; /* Stack info and form/locations */
     align-items: center; /* Center items */
-    gap: 3rem; /* Space between info and form (if form was visible) */
+    gap: 3rem; /* Space between items */
     margin-top: 2rem;
 }
 
@@ -833,6 +827,112 @@ input:checked + .slider .icon.moon { opacity: 0;}
     margin-top: 1rem;
     font-size: 0.9rem;
 }
+
+/* --- Office Locations Styles --- */
+.office-locations {
+    width: 100%;
+    max-width: 900px; /* Adjust as needed */
+    margin: 3rem auto 0 auto; /* Space above, centered */
+    padding: 2.5rem; /* Increased padding */
+    background-color: var(--background-color); /* Use contrast bg */
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.office-locations h3 {
+    font-size: 1.8rem;
+    color: var(--text-color);
+    margin-bottom: 2.5rem;
+    position: relative;
+    display: inline-block; /* Allows underline positioning */
+}
+/* Underline effect for main title */
+.office-locations h3::after {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 3px;
+    background-color: var(--primary-color);
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.locations-container {
+    display: flex;
+    justify-content: space-around; /* Space out current/future */
+    flex-wrap: wrap; /* Allow stacking on smaller screens */
+    gap: 2rem; /* Space between columns */
+}
+
+.current-locations,
+.future-locations {
+    flex-basis: 45%; /* Roughly half width each */
+    min-width: 280px; /* Minimum width before stacking */
+    text-align: left; /* Align text left within each column */
+}
+
+.office-locations h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    display: flex; /* Align icon */
+    align-items: center;
+}
+
+.icon-header {
+    margin-right: 0.75rem;
+    font-size: 1.1em; /* Slightly larger than h4 text */
+    color: var(--primary-color); /* Header icon color */
+}
+
+.future-locations .icon-header {
+    color: var(--secondary-color); /* Different color for future header */
+}
+
+.location-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem; /* Space between location items */
+}
+
+.location-item {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 0; /* Remove default paragraph margin */
+    padding-left: 0.5rem; /* Indent text slightly */
+    transition: color var(--transition-fast);
+}
+
+.location-item:hover {
+    color: var(--text-color); /* Highlight on hover */
+}
+
+.location-icon {
+    margin-right: 0.8rem;
+    font-size: 1.1em;
+    width: 1.2em; /* Ensure icons align nicely */
+    text-align: center;
+}
+
+.location-icon.current {
+    color: var(--primary-color);
+}
+
+.location-icon.future {
+    color: var(--secondary-color);
+}
+
+/* --- End Office Locations --- */
+
 
 /* Contact Form (If uncommented) */
 .contact-form {
@@ -947,6 +1047,7 @@ footer {
     margin-bottom: 0;
 }
 
+
 /* Animations */
 @keyframes fadeInUp {
     from {
@@ -1040,6 +1141,32 @@ footer {
      }
 
      footer { clip-path: polygon(0 5%, 100% 0, 100% 100%, 0% 100%); } /* Adjust clip path */
+}
+
+/* Responsive Adjustments for Locations */
+@media screen and (max-width: 600px) {
+    .locations-container {
+        flex-direction: column; /* Stack columns */
+        align-items: center; /* Center stacked columns */
+        gap: 2.5rem;
+    }
+
+    .current-locations,
+    .future-locations {
+        flex-basis: 100%; /* Full width when stacked */
+        max-width: 350px; /* Limit width when stacked */
+        text-align: center; /* Center text when stacked */
+    }
+     .office-locations h4 {
+         justify-content: center; /* Center header icon and text */
+     }
+     .location-list {
+         align-items: center; /* Center list items */
+     }
+     .location-item {
+          justify-content: center; /* Center icon and text within item */
+          padding-left: 0;
+     }
 }
 
 @media screen and (max-width: 576px) {
