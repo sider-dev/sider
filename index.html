@@ -9,17 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Placeholder for Custom Cursor Style -->
-    <style>
-      /* Basic Custom Cursor - Enhance as needed */
-      /* body.custom-cursor-active { cursor: none; } */
-      /* .custom-cursor { position: fixed; left: 0; top: 0; pointer-events: none; z-index: 9999; /* ... more styles */ } */
-    </style>
 </head>
 <body >
-    <!-- Custom Cursor Element (Optional) -->
-    <!-- <div class="custom-cursor"></div> -->
-
     <!-- Navigation -->
     <nav>
         <div class="container nav-container">
@@ -76,20 +67,12 @@
     <!-- Services Section -->
     <section id="services" class="services" data-readable-section="true">
         <div class="container">
-            <div class="section-header" data-readable-content="true"> <!-- Mark header as readable -->
+            <div class="section-header" data-readable-content="true">
                 <h2>Our Expertise</h2>
                 <p>Comprehensive digital solutions tailored to fuel your growth</p>
             </div>
-            <!-- Add data-readable-content to the grid if you want descriptions read -->
             <div class="services-grid" data-readable-content="true">
                 <!-- Service cards populated via JS -->
-                <!-- Example card structure if JS fails:
-                <div class="service-card fade-in">
-                    <div class="icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
-                    <h3>Mobile Applications</h3>
-                    <p>Native & cross-platform apps delivering exceptional UX across all devices.</p>
-                </div>
-                 -->
             </div>
         </div>
     </section>
@@ -102,25 +85,23 @@
                 <h2>Why Partner with SIDER?</h2>
                 <p>The strategic advantages that set us apart</p>
             </div>
-             <!-- Add data-readable-content to the grid if you want descriptions read -->
             <div class="features-grid" data-readable-content="true">
-                <!-- Feature cards updated slightly -->
-                <div class="feature-card">
+                 <div class="feature-card fade-in"> <!-- Add fade-in here too -->
                     <div class="icon-wrapper"><i class="fa-solid fa-users-gear"></i></div>
                     <h3>Expert Teams</h3>
                     <p>Dedicated specialists with deep industry knowledge, delivering exceptional, collaborative results.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card fade-in">
                      <div class="icon-wrapper"><i class="fa-solid fa-lightbulb"></i></div>
                     <h3>Market Insight</h3>
                     <p>Strategic understanding of digital trends to ensure your business leads, not follows.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card fade-in">
                      <div class="icon-wrapper"><i class="fa-solid fa-gem"></i></div>
                     <h3>Quality Assurance</h3>
                     <p>Rigorous testing and QA processes guarantee reliable, high-performance, secure solutions.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card fade-in">
                     <div class="icon-wrapper"><i class="fa-solid fa-arrows-spin"></i></div>
                     <h3>Agile Collaboration</h3>
                     <p>Flexible, transparent development with continuous feedback and adaptability.</p>
@@ -135,20 +116,50 @@
         <div class="container">
             <div class="section-header" data-readable-content="true">
                 <h2>Let's Innovate Together</h2>
-                <p>Ready to transform your digital presence? Reach out and let's discuss your vision.</p>
+                <p>Ready to transform your digital presence? Reach out or find us globally.</p> <!-- Updated subtitle -->
             </div>
             <div class="contact-wrapper">
-                <div class="contact-info" data-readable-content="true">
+                <!-- Email Info -->
+                <div class="contact-info fade-in" data-readable-content="true">
                      <div class="contact-item">
                         <div class="icon-wrapper"><i class="fa-solid fa-envelope-open-text"></i></div>
                         <div class="details">
-                            <h3>Send Email To</h3>
-                             <p><a href="mailto:contact@sider.dev" class="contact-link">contact@sider.dev</a></p> <!-- Slightly modified for better reading -->
+                            <h3>Email Us Directly</h3>
+                             <p>Our email address is <a href="mailto:contact@sider.dev" class="contact-link">contact@sider.dev</a></p>
                         </div>
                     </div>
-                    <p class="contact-prompt">We respond within one business day.</p>
+                    <p class="contact-prompt">We typically respond within one business day.</p>
                 </div>
+
+                <!-- Office Locations -->
+                <div class="office-locations fade-in">
+                    <h3 data-readable-content="true">Our Global Network</h3>
+                    <div class="locations-container">
+                        <div class="current-locations" data-readable-content="true">
+                            <h4><i class="fa-solid fa-map-marked-alt icon-header"></i> Currently Operating In:</h4>
+                            <div class="location-list">
+                                <p class="location-item"><i class="fa-solid fa-location-dot location-icon current"></i> Bern, Switzerland (HQ)</p>
+                                <p class="location-item"><i class="fa-solid fa-location-dot location-icon current"></i> Stockholm, Sweden</p>
+                                <p class="location-item"><i class="fa-solid fa-location-dot location-icon current"></i> Izmir, Türkiye</p>
+                                <p class="location-item"><i class="fa-solid fa-location-dot location-icon current"></i> Haskovo, Bulgaria</p>
+                            </div>
+                        </div>
+                        <div class="future-locations" data-readable-content="true">
+                            <h4><i class="fa-solid fa-plane-departure icon-header"></i> Expanding Soon To:</h4>
+                             <div class="location-list">
+                                <p class="location-item"><i class="fa-solid fa-map-pin location-icon future"></i> Tokyo, Japan</p>
+                                <p class="location-item"><i class="fa-solid fa-map-pin location-icon future"></i> Sydney, Australia</p>
+                                <p class="location-item"><i class="fa-solid fa-map-pin location-icon future"></i> San Francisco, USA</p>
+                                <p class="location-item"><i class="fa-solid fa-map-pin location-icon future"></i> Washington D.C., USA</p>      
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                  <!-- Form commented out -->
+                 <!--
+                 <form id="contact-form" class="contact-form"> ... </form>
+                 -->
              </div>
         </div>
     </section>
@@ -159,6 +170,11 @@
             <div class="footer-content">
                 <div class="footer-logo">SIDER<span>.dev</span></div>
                 <p class="footer-tagline">Innovating the Digital Frontier.</p>
+                <div class="footer-links">
+                     <a href="#services">Services</a> |
+                     <a href="#why-sider">Why SIDER?</a> |
+                     <a href="#">Privacy Policy</a>
+                </div>
                 <p class="copyright">© 2025 SIDER.dev. All rights reserved.</p>
             </div>
         </div>
