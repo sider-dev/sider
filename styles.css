@@ -1006,6 +1006,7 @@ footer {
     text-align: center;
     max-width: 800px;
     margin: 0 auto;
+    display: grid;
 }
 
 .footer-logo {
@@ -1041,7 +1042,6 @@ footer {
 }
 
 .copyright {
-    text-align: center;
     font-size: 0.9rem;
     color: #a0a0a0;
     margin-top: 2rem;
