@@ -6,6 +6,7 @@
     --dark-color: #232340;
     --light-color: #f8f9fa;
     --text-color: #3a3a5a;
+    --footer-color: #5b92e5
     --transition: all 0.3s ease;
     --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
@@ -380,7 +381,7 @@ nav {
 
 /* Footer */
 footer {
-    background-color: var(--dark-color);
+    background-color: var(--footer-color);
     color: white;
     padding: 3rem 0;
 }
@@ -393,6 +394,7 @@ footer {
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 1rem;
+    color: var(--primary-color);
 }
 
 .footer-logo span {
