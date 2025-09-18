@@ -91,24 +91,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- Theme Switch ---
-    const themeCheckbox = document.getElementById('theme-checkbox');
-    const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+    const themeSelect = document.getElementById('theme-select');
+    const currentTheme = localStorage.getItem('theme') || 'light';
 
-    if (currentTheme) {
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        themeCheckbox.checked = (currentTheme === 'light'); // Light = checked
-        if (window.updateMatrixColors) window.updateMatrixColors();
-    } else {
-        document.documentElement.setAttribute('data-theme', 'light');
-        themeCheckbox.checked = true; // Default light = checked
+    // Set initial theme
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    if (themeSelect) {
+        themeSelect.value = currentTheme;
     }
+    if (window.updateMatrixColors) window.updateMatrixColors();
 
-    themeCheckbox.addEventListener('change', function() {
-        const theme = this.checked ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-        if (window.updateMatrixColors) window.updateMatrixColors();
-    });
+    // Handle theme changes
+    if (themeSelect) {
+        themeSelect.addEventListener('change', function() {
+            const theme = this.value;
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (window.updateMatrixColors) window.updateMatrixColors();
+            console.log(`Theme changed to: ${theme}`);
+        });
+    }
 
 
     // --- Mobile Menu Toggle ---
@@ -201,9 +203,14 @@ document.addEventListener('DOMContentLoaded', function() {
     function drawMatrix() {
         const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim();
         let rgbaBg = 'rgba(248, 249, 250, 0.05)'; // Default light fallback
-         if (document.documentElement.getAttribute('data-theme') === 'dark') {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        
+         if (currentTheme === 'dark') {
              rgbaBg = 'rgba(18, 24, 39, 0.05)'; // Default dark fallback
+         } else if (currentTheme === 'retro') {
+             rgbaBg = 'rgba(45, 52, 54, 0.05)'; // Retro fallback
          }
+         
          if (bgColor.startsWith('#')) {
             const r = parseInt(bgColor.substring(1, 3), 16);
             const g = parseInt(bgColor.substring(3, 5), 16);
@@ -459,19 +466,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }
          else if (command.includes('dark mode') || command.includes('night mode')) {
              if (document.documentElement.getAttribute('data-theme') !== 'dark') {
-                themeCheckbox.checked = false;
-                themeCheckbox.dispatchEvent(new Event('change'));
+                if (themeSelect) {
+                    themeSelect.value = 'dark';
+                    themeSelect.dispatchEvent(new Event('change'));
+                }
                 speakFeedback("Switched to dark mode.");
              } else {
                  speakFeedback("Already in dark mode.");
              }
          } else if (command.includes('light mode') || command.includes('day mode')) {
              if (document.documentElement.getAttribute('data-theme') !== 'light') {
-                 themeCheckbox.checked = true;
-                 themeCheckbox.dispatchEvent(new Event('change'));
+                 if (themeSelect) {
+                     themeSelect.value = 'light';
+                     themeSelect.dispatchEvent(new Event('change'));
+                 }
                 speakFeedback("Switched to light mode.");
              } else {
                  speakFeedback("Already in light mode.");
+             }
+         } else if (command.includes('retro mode') || command.includes('retro theme') || command.includes('80s mode')) {
+             if (document.documentElement.getAttribute('data-theme') !== 'retro') {
+                 if (themeSelect) {
+                     themeSelect.value = 'retro';
+                     themeSelect.dispatchEvent(new Event('change'));
+                 }
+                speakFeedback("Switched to retro mode.");
+             } else {
+                 speakFeedback("Already in retro mode.");
              }
          }
         else if (command.includes('read') || command.includes('speak')) {
