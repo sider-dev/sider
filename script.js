@@ -684,4 +684,448 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // --- Mobile Secret Activation System ---
+    class MobileSecretActivator {
+        constructor() {
+            this.touchSequence = [];
+            this.corners = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+            this.currentCornerIndex = 0;
+            this.sequenceTimeout = null;
+            this.swipePoints = [];
+            this.isTracking = false;
+            this.activationMethods = {
+                corners: true,
+                logoLongPress: true,
+                swipePattern: true,
+                tripleTab: true
+            };
+            
+            this.init();
+        }
+
+        init() {
+            // Only initialize on touch devices
+            if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+                this.setupCornerTaps();
+                this.setupLogoLongPress();
+                this.setupSwipePattern();
+                this.setupTripleTap();
+                this.addVisualFeedback();
+                console.log('📱 Mobile secret activation methods initialized!');
+            }
+        }
+
+        // Method 1: Corner tap sequence (↖️↗️↙️↘️)
+        setupCornerTaps() {
+            document.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const x = touch.clientX;
+                const y = touch.clientY;
+                const corner = this.detectCorner(x, y);
+                
+                if (corner === this.corners[this.currentCornerIndex]) {
+                    this.flashScreen();
+                    this.vibrate([50]);
+                    this.currentCornerIndex++;
+                    
+                    console.log(`Corner ${corner} tapped (${this.currentCornerIndex}/${this.corners.length})`);
+                    
+                    if (this.currentCornerIndex >= this.corners.length) {
+                        this.activateGame('Corner Sequence');
+                        this.currentCornerIndex = 0;
+                    }
+                    
+                    this.resetSequenceTimeout();
+                } else if (corner && this.currentCornerIndex > 0) {
+                    // Wrong corner - reset sequence
+                    console.log('Wrong corner tapped, resetting sequence');
+                    this.currentCornerIndex = 0;
+                }
+            }, { passive: false });
+        }
+
+        detectCorner(x, y) {
+            const threshold = 80; // Increased touch area
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            if (x < threshold && y < threshold) return 'top-left';
+            if (x > width - threshold && y < threshold) return 'top-right';
+            if (x < threshold && y > height - threshold) return 'bottom-left';
+            if (x > width - threshold && y > height - threshold) return 'bottom-right';
+            return null;
+        }
+
+        // Method 2: Logo long press (2 seconds)
+        setupLogoLongPress() {
+            const logo = document.querySelector('.logo');
+            if (!logo) return;
+
+            let pressTimer;
+            let pressStartTime;
+            
+            const startPress = (e) => {
+                e.preventDefault();
+                pressStartTime = Date.now();
+                pressTimer = setTimeout(() => {
+                    this.activateGame('Logo Long Press');
+                    this.vibrate([100, 50, 100]);
+                }, 2000);
+                
+                // Visual feedback - logo starts glowing
+                logo.style.transition = 'all 2s ease';
+                logo.style.textShadow = '0 0 20px currentColor';
+                logo.style.transform = 'scale(1.05)';
+            };
+            
+            const endPress = (e) => {
+                clearTimeout(pressTimer);
+                logo.style.textShadow = '';
+                logo.style.transform = '';
+                
+                const pressDuration = Date.now() - pressStartTime;
+                console.log(`Logo pressed for ${pressDuration}ms`);
+            };
+            
+            logo.addEventListener('touchstart', startPress);
+            logo.addEventListener('touchend', endPress);
+            logo.addEventListener('touchcancel', endPress);
+        }
+
+        // Method 3: Triple tap anywhere
+        setupTripleTap() {
+            let tapCount = 0;
+            let tapTimer;
+            
+            document.addEventListener('touchstart', (e) => {
+                tapCount++;
+                
+                if (tapCount === 1) {
+                    tapTimer = setTimeout(() => {
+                        tapCount = 0; // Reset if too slow
+                    }, 1000);
+                } else if (tapCount === 3) {
+                    clearTimeout(tapTimer);
+                    tapCount = 0;
+                    
+                    // Check if taps are roughly in same area
+                    const touch = e.touches[0];
+                    const centerX = window.innerWidth / 2;
+                    const centerY = window.innerHeight / 2;
+                    const distance = Math.sqrt(
+                        Math.pow(touch.clientX - centerX, 2) + 
+                        Math.pow(touch.clientY - centerY, 2)
+                    );
+                    
+                    if (distance < 100) { // Taps in center area
+                        this.activateGame('Triple Tap');
+                        this.vibrate([50, 50, 50]);
+                    }
+                }
+            });
+        }
+
+        // Method 4: Swipe pattern (draw "S" shape)
+        setupSwipePattern() {
+            let startPoint = null;
+            let swipePoints = [];
+            
+            document.addEventListener('touchstart', (e) => {
+                const touch = e.touches[0];
+                startPoint = { x: touch.clientX, y: touch.clientY, time: Date.now() };
+                swipePoints = [startPoint];
+                this.isTracking = true;
+            });
+            
+            document.addEventListener('touchmove', (e) => {
+                if (this.isTracking && swipePoints.length < 20) { // Limit points
+                    const touch = e.touches[0];
+                    swipePoints.push({ 
+                        x: touch.clientX, 
+                        y: touch.clientY, 
+                        time: Date.now() 
+                    });
+                }
+            });
+            
+            document.addEventListener('touchend', (e) => {
+                if (this.isTracking && swipePoints.length > 8) {
+                    if (this.detectSPattern(swipePoints)) {
+                        this.activateGame('S Pattern Swipe');
+                        this.vibrate([100, 50, 100, 50, 100]);
+                    }
+                }
+                startPoint = null;
+                swipePoints = [];
+                this.isTracking = false;
+            });
+        }
+
+        detectSPattern(points) {
+            if (points.length < 8) return false;
+            
+            const start = points[0];
+            const quarter = points[Math.floor(points.length * 0.25)];
+            const half = points[Math.floor(points.length * 0.5)];
+            const threeQuarter = points[Math.floor(points.length * 0.75)];
+            const end = points[points.length - 1];
+            
+            // Simplified S pattern detection
+            const rightThenLeft = quarter.x > start.x && half.x < quarter.x;
+            const downwardMotion = end.y > start.y;
+            const finalRightMotion = end.x > threeQuarter.x;
+            
+            return rightThenLeft && downwardMotion && finalRightMotion;
+        }
+
+        flashScreen() {
+            const flashDiv = document.createElement('div');
+            flashDiv.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 212, 170, 0.3);
+                pointer-events: none;
+                z-index: 9999;
+                animation: flash 0.15s ease-out;
+            `;
+            
+            document.body.appendChild(flashDiv);
+            setTimeout(() => {
+                if (flashDiv.parentNode) {
+                    flashDiv.parentNode.removeChild(flashDiv);
+                }
+            }, 150);
+            
+            // Add flash animation if not exists
+            if (!document.querySelector('#flash-animation-style')) {
+                const style = document.createElement('style');
+                style.id = 'flash-animation-style';
+                style.textContent = `
+                    @keyframes flash {
+                        0% { opacity: 0; }
+                        50% { opacity: 1; }
+                        100% { opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        vibrate(pattern = [100]) {
+            if (navigator.vibrate) {
+                navigator.vibrate(pattern);
+            }
+        }
+
+        resetSequenceTimeout() {
+            clearTimeout(this.sequenceTimeout);
+            this.sequenceTimeout = setTimeout(() => {
+                console.log('Secret sequence timeout - resetting');
+                this.currentCornerIndex = 0;
+            }, 10000); // 10 second timeout
+        }
+
+        addVisualFeedback() {
+            // Add subtle corner indicators (only visible during development)
+            if (window.location.hostname === 'localhost' || window.location.hostname.includes('127.0.0.1')) {
+                const corners = ['top: 10px; left: 10px;', 'top: 10px; right: 10px;', 'bottom: 10px; left: 10px;', 'bottom: 10px; right: 10px;'];
+                corners.forEach((style, index) => {
+                    const indicator = document.createElement('div');
+                    indicator.style.cssText = `
+                        position: fixed;
+                        ${style}
+                        width: 30px;
+                        height: 30px;
+                        border: 2px dashed rgba(0, 212, 170, 0.3);
+                        border-radius: 50%;
+                        pointer-events: none;
+                        z-index: 1001;
+                        font-size: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: rgba(0, 212, 170, 0.5);
+                        background: rgba(0, 0, 0, 0.1);
+                    `;
+                    indicator.textContent = index + 1;
+                    document.body.appendChild(indicator);
+                });
+            }
+        }
+
+        activateGame(method) {
+            console.log(`🎮 Secret game activated via: ${method}`);
+            
+            // Enhanced visual feedback
+            this.flashScreen();
+            
+            // Try to trigger the game (assuming game.js is loaded)
+            setTimeout(() => {
+                if (window.SecretActivator) {
+                    // If the SecretActivator class exists, use it
+                    const activator = new window.SecretActivator();
+                    activator.activateGame();
+                } else {
+                    // Fallback: show the game element if it exists
+                    const gameElement = document.getElementById('secret-game');
+                    if (gameElement) {
+                        gameElement.style.display = 'flex';
+                        document.body.style.overflow = 'hidden';
+                        console.log('🎮 Game activated!');
+                    } else {
+                        console.log('🎮 Game element not found - make sure game.js is loaded');
+                    }
+                }
+            }, 200);
+            
+            // Show activation message
+            this.showActivationMessage(method);
+        }
+        
+        showActivationMessage(method) {
+            const message = document.createElement('div');
+            message.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0, 0, 0, 0.9);
+                color: #00d4aa;
+                padding: 1rem 2rem;
+                border-radius: 10px;
+                border: 2px solid #00d4aa;
+                font-family: 'JetBrains Mono', monospace;
+                font-weight: 600;
+                text-align: center;
+                z-index: 9998;
+                animation: messageAppear 0.5s ease-out;
+                text-shadow: 0 0 10px #00d4aa;
+                box-shadow: 0 0 30px rgba(0, 212, 170, 0.5);
+            `;
+            message.innerHTML = `
+                <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">🎮 SECRET UNLOCKED!</div>
+                <div style="font-size: 0.9rem; opacity: 0.8;">via ${method}</div>
+            `;
+            
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                if (message.parentNode) {
+                    message.style.opacity = '0';
+                    message.style.transform = 'translate(-50%, -50%) scale(0.8)';
+                    setTimeout(() => {
+                        if (message.parentNode) {
+                            message.parentNode.removeChild(message);
+                        }
+                    }, 300);
+                }
+            }, 2000);
+            
+            // Add animation styles if not exists
+            if (!document.querySelector('#message-animation-style')) {
+                const style = document.createElement('style');
+                style.id = 'message-animation-style';
+                style.textContent = `
+                    @keyframes messageAppear {
+                        from {
+                            opacity: 0;
+                            transform: translate(-50%, -50%) scale(0.8);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translate(-50%, -50%) scale(1);
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+    }
+
+    // Initialize mobile secret activator
+    const mobileActivator = new MobileSecretActivator();
+    
+    // Global function to activate game (for compatibility with game.js)
+    window.activateSecretGame = function(method = 'External') {
+        if (mobileActivator) {
+            mobileActivator.activateGame(method);
+        }
+    };
+
 }); // End DOMContentLoaded
+
+// --- Additional Mobile-Specific Secret Methods ---
+// Add some more fun activation methods that work specifically well on mobile
+
+// Orientation change activation (landscape → portrait → landscape)
+let orientationSequence = [];
+let orientationTimeout;
+
+function handleOrientationChange() {
+    const orientation = screen.orientation ? screen.orientation.angle : window.orientation;
+    orientationSequence.push(orientation);
+    
+    // Keep only last 3 orientations
+    if (orientationSequence.length > 3) {
+        orientationSequence.shift();
+    }
+    
+    // Check for specific pattern: 0 → 90 → 0 (portrait → landscape → portrait)
+    if (orientationSequence.length === 3) {
+        const pattern = orientationSequence.join(',');
+        if (pattern === '0,90,0' || pattern === '0,-90,0') {
+            if (window.activateSecretGame) {
+                window.activateSecretGame('Orientation Dance');
+                orientationSequence = [];
+            }
+        }
+    }
+    
+    clearTimeout(orientationTimeout);
+    orientationTimeout = setTimeout(() => {
+        orientationSequence = [];
+    }, 5000);
+}
+
+// Listen for orientation changes
+if ('onorientationchange' in window) {
+    window.addEventListener('orientationchange', handleOrientationChange);
+}
+
+// Device motion activation (shake detection)
+if ('DeviceMotionEvent' in window) {
+    let shakeCount = 0;
+    let shakeTimeout;
+    let lastShake = 0;
+    
+    window.addEventListener('devicemotion', (e) => {
+        const acceleration = e.accelerationIncludingGravity;
+        if (!acceleration) return;
+        
+        const totalAcceleration = Math.abs(acceleration.x) + Math.abs(acceleration.y) + Math.abs(acceleration.z);
+        const currentTime = Date.now();
+        
+        if (totalAcceleration > 25 && currentTime - lastShake > 500) {
+            shakeCount++;
+            lastShake = currentTime;
+            
+            console.log(`Shake detected! Count: ${shakeCount}`);
+            
+            if (shakeCount >= 3) {
+                if (window.activateSecretGame) {
+                    window.activateSecretGame('Shake to Activate');
+                    shakeCount = 0;
+                }
+            }
+            
+            clearTimeout(shakeTimeout);
+            shakeTimeout = setTimeout(() => {
+                shakeCount = 0;
+            }, 3000);
+        }
+    });
+}
