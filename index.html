@@ -242,13 +242,15 @@
                     <i class="fa-solid fa-volume-high"></i>
                 </button>
 
-                <!-- Theme Switch -->
-                <div class="theme-switch-wrapper">
-                    <select id="theme-select" class="theme-select" aria-label="Select Theme">
-                        <option value="light">☀️ Light</option>
-                        <option value="dark">🌙 Dark</option>
-                        <option value="retro">📼 Retro</option>
-                    </select>
+                <!-- Light/Dark Theme Toggle -->
+                <div class="theme-toggle-wrapper">
+                    <input type="checkbox" id="theme-toggle" class="theme-toggle-input" aria-label="Toggle Dark Mode">
+                    <label for="theme-toggle" class="theme-toggle-label">
+                        <span class="theme-toggle-slider">
+                            <span class="theme-icon sun-icon">☀️</span>
+                            <span class="theme-icon moon-icon">🌙</span>
+                        </span>
+                    </label>
                 </div>
             </div>
 
