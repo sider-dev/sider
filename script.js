@@ -183,54 +183,134 @@ document.addEventListener('DOMContentLoaded', function() {
     updateActiveNavLink(); // Initial call
 
 
-    // --- Enhanced Matrix Rain Animation (Canvas) ---
+    // --- Authentic Japanese Matrix Rain Effect with Sushi Recipe Characters ---
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     let width = canvas.width = window.innerWidth;
     let height = canvas.height = window.innerHeight;
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<>/?=+-*[]{}_|#@!$%^&():;'.split('');
-    const fontSize = 14;
+    
+    // Authentic Japanese characters from sushi recipes and cooking terminology
+    const japaneseChars = [
+        // Hiragana characters (common in recipes)
+        'あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'が', 'ぎ', 'ぐ', 'げ', 'ご',
+        'さ', 'し', 'す', 'せ', 'そ', 'ざ', 'じ', 'ず', 'ぜ', 'ぞ', 'た', 'ち', 'つ', 'て', 'と',
+        'だ', 'ぢ', 'づ', 'で', 'ど', 'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ',
+        'ば', 'び', 'ぶ', 'べ', 'ぼ', 'ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ', 'ま', 'み', 'む', 'め', 'も',
+        'や', 'ゆ', 'よ', 'ら', 'り', 'る', 'れ', 'ろ', 'わ', 'ゐ', 'ゑ', 'を', 'ん',
+        
+        // Katakana characters (used for foreign words)
+        'ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ', 'ガ', 'ギ', 'グ', 'ゲ', 'ゴ',
+        'サ', 'シ', 'ス', 'セ', 'ソ', 'ザ', 'ジ', 'ズ', 'ゼ', 'ゾ', 'タ', 'チ', 'ツ', 'テ', 'ト',
+        'ダ', 'ヂ', 'ヅ', 'デ', 'ド', 'ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ',
+        'バ', 'ビ', 'ブ', 'ベ', 'ボ', 'パ', 'ピ', 'プ', 'ペ', 'ポ', 'マ', 'ミ', 'ム', 'メ', 'モ',
+        'ヤ', 'ユ', 'ヨ', 'ラ', 'リ', 'ル', 'レ', 'ロ', 'ワ', 'ヰ', 'ヱ', 'ヲ', 'ン',
+        
+        // Common Kanji used in sushi and cooking
+        '寿', '司', '鮨', '魚', '米', '海', '水', '火', '切', '作', '食', '味', '新', '鮮',
+        '醤', '油', '酢', '塩', '砂', '糖', '生', '焼', '煮', '茹', '揚', '蒸', '炒', '和',
+        '洋', '中', '料', '理', '材', '具', '汁', '出', '昆', '布', '鰹', '節', '味', '噌',
+        
+        // Sushi-specific terms in various scripts
+        'まぐろ', 'さけ', 'たこ', 'えび', 'いか', 'うに', 'いくら', 'あなご', 'さば', 'あじ',
+        'トロ', 'サーモン', 'ツナ', 'シャリ', 'ワサビ', 'ガリ', 'ネタ', 'ノリ', 'テッカ', 'カッパ',
+        
+        // Numbers used in recipes
+        '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '百', '千',
+        '１', '２', '３', '４', '５', '６', '７', '８', '９', '０',
+        
+        // Cooking measurements and time
+        'グラム', 'キロ', 'リットル', 'ミリ', 'センチ', '分', '時間', '秒', '度', '℃',
+        
+        // Special characters used in Japanese text
+        '。', '、', '？', '！', '：', '；', '（', '）', '「', '」', '『', '』', '〈', '〉', '《', '》'
+    ];
+    
+    const fontSize = 16;
     const columns = Math.floor(width / fontSize);
     const drops = Array(columns).fill(1);
-    let charColor = getComputedStyle(document.documentElement).getPropertyValue('--matrix-char-color').trim();
+    let charColor = '#00FF41'; // Classic Matrix green
     let frameCount = 0;
     let animationFrameId;
 
+    // Update colors based on theme
     window.updateMatrixColors = () => {
-        charColor = getComputedStyle(document.documentElement).getPropertyValue('--matrix-char-color').trim();
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        switch(currentTheme) {
+            case 'dark':
+                charColor = '#00FF41'; // Classic Matrix green
+                break;
+            case 'retro':
+                charColor = '#00FFFF'; // Cyan for retro
+                break;
+            case 'light':
+            default:
+                charColor = 'rgba(0, 255, 65, 0.8)'; // Semi-transparent green for light theme
+                break;
+        }
     };
 
     function drawMatrix() {
-        const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim();
-        let rgbaBg = 'rgba(248, 249, 250, 0.05)'; // Default light fallback
         const currentTheme = document.documentElement.getAttribute('data-theme');
+        let bgOverlay;
         
-         if (currentTheme === 'dark') {
-             rgbaBg = 'rgba(18, 24, 39, 0.05)'; // Default dark fallback
-         } else if (currentTheme === 'retro') {
-             rgbaBg = 'rgba(45, 52, 54, 0.05)'; // Retro fallback
-         }
-         
-         if (bgColor.startsWith('#')) {
-            const r = parseInt(bgColor.substring(1, 3), 16);
-            const g = parseInt(bgColor.substring(3, 5), 16);
-            const b = parseInt(bgColor.substring(5, 7), 16);
-             rgbaBg = `rgba(${r}, ${g}, ${b}, 0.05)`;
+        // Theme-specific background overlay
+        switch(currentTheme) {
+            case 'dark':
+                bgOverlay = 'rgba(0, 0, 0, 0.1)';
+                break;
+            case 'retro':
+                bgOverlay = 'rgba(45, 52, 54, 0.1)';
+                break;
+            case 'light':
+            default:
+                bgOverlay = 'rgba(248, 249, 250, 0.1)';
+                break;
         }
-        ctx.fillStyle = rgbaBg;
+        
+        // Create trailing effect
+        ctx.fillStyle = bgOverlay;
         ctx.fillRect(0, 0, width, height);
+        
+        // Set text properties
         ctx.fillStyle = charColor;
-        ctx.font = fontSize + 'px monospace';
+        ctx.font = `${fontSize}px 'Courier New', monospace`;
+        ctx.textAlign = 'center';
+        
+        // Add glow effect for authentic Matrix look
+        ctx.shadowColor = charColor;
+        ctx.shadowBlur = 8;
+        
         for (let i = 0; i < drops.length; i++) {
-            const text = chars[Math.floor(Math.random() * chars.length)];
-            const x = i * fontSize;
+            // Select random Japanese character
+            const char = japaneseChars[Math.floor(Math.random() * japaneseChars.length)];
+            const x = i * fontSize + fontSize / 2;
             const y = drops[i] * fontSize;
-            ctx.fillText(text, x, y);
+            
+            // Add brightness variation for depth
+            const brightness = Math.random() * 0.5 + 0.5; // 0.5 to 1.0
+            const alpha = Math.min(1, brightness + 0.2);
+            
+            // Set character color with brightness variation
+            if (currentTheme === 'light') {
+                ctx.fillStyle = `rgba(0, 255, 65, ${alpha * 0.8})`;
+            } else {
+                ctx.fillStyle = `rgba(0, 255, 65, ${alpha})`;
+            }
+            
+            // Draw the character
+            ctx.fillText(char, x, y);
+            
+            // Reset drop position when it goes off screen
             if (y > height && Math.random() > 0.975) {
                 drops[i] = 0;
             }
+            
+            // Move drop down
             drops[i]++;
         }
+        
+        // Reset shadow for next frame
+        ctx.shadowBlur = 0;
         frameCount++;
     }
 
@@ -238,6 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
         drawMatrix();
         animationFrameId = requestAnimationFrame(animateMatrix);
     }
+    
     let resizeTimeout;
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimeout);
@@ -247,11 +328,14 @@ document.addEventListener('DOMContentLoaded', function() {
             height = canvas.height = window.innerHeight;
             const newColumns = Math.floor(width / fontSize);
             drops.length = newColumns;
-            for(let i=0; i<newColumns; i++) { if (drops[i] === undefined) drops[i] = 1; }
+            for(let i=0; i<newColumns; i++) { 
+                if (drops[i] === undefined) drops[i] = 1; 
+            }
             updateMatrixColors();
             animateMatrix();
         }, 250);
     });
+    
     updateMatrixColors();
     animateMatrix();
 
