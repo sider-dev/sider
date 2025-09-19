@@ -6,6 +6,7 @@
     <title>SIDER.dev | Software Development & Digital Innovation Research</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="nexus-styles.css">
+    <link rel="stylesheet" href="chess-game.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,6 +14,69 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+    <!-- Chess Game Container -->
+    <div id="chess-game" class="chess-game-overlay">
+        <div class="chess-game-container">
+            <div class="chess-header">
+                <h2><span class="matrix-text">SIDER</span> CHESS</h2>
+                <div class="chess-controls">
+                    <button id="chess-new-game" class="chess-btn">New Game</button>
+                    <button id="chess-settings" class="chess-btn">Settings</button>
+                    <button id="chess-close" class="chess-btn close">✕</button>
+                </div>
+            </div>
+            <div class="chess-main">
+                <div class="chess-sidebar left">
+                    <h3>Game Info</h3>
+                    <div id="chess-timer">00:00</div>
+                    <div id="chess-moves">Moves: 0</div>
+                    <div id="chess-turn">White to move</div>
+                    <div class="chess-stats">
+                        <h4>Statistics</h4>
+                        <div class="stat-row">
+                            <span>Games Played:</span>
+                            <span id="games-played">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Wins:</span>
+                            <span id="wins">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Best Time:</span>
+                            <span id="best-time">--:--</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chess-board-container">
+                    <canvas id="chess-canvas"></canvas>
+                </div>
+                <div class="chess-sidebar right">
+                    <h3>Captured</h3>
+                    <div id="white-captured" class="captured-pieces">
+                        <h4>White Pieces</h4>
+                        <div class="captured-list"></div>
+                    </div>
+                    <div id="black-captured" class="captured-pieces">
+                        <h4>Black Pieces</h4>
+                        <div class="captured-list"></div>
+                    </div>
+                    <div class="game-hints">
+                        <h4>Quick Tips</h4>
+                        <ul>
+                            <li>Click to select pieces</li>
+                            <li>Valid moves show as dots</li>
+                            <li>Red dots = captures</li>
+                            <li>Press ESC to exit</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="chess-footer">
+                <div class="chess-status" id="chess-status">Welcome to SIDER Chess! Activate with phone shake, type "sider", or use Konami code: ↑↑↓↓←→←→BA</div>
+            </div>
+        </div>
+    </div>
+
     <!-- SIDER NEXUS - Secret Game Container -->
     <div id="nexus-game" class="nexus-game" style="display: none;">
         <!-- Game Main Menu -->
@@ -356,5 +420,6 @@
 
     <script src="script.js"></script>
     <script src="nexus-game.js"></script>
+    <script src="chess-game.js"></script>
 </body>
 </html>
