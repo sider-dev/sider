@@ -183,13 +183,16 @@ document.addEventListener('DOMContentLoaded', function() {
     updateActiveNavLink(); // Initial call
 
 
-    // --- Authentic Japanese Matrix Rain Effect with Sushi Recipe Characters ---
+    // --- Hybrid Matrix Rain Effect - Japanese for Dark/Retro, English for Light ---
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     let width = canvas.width = window.innerWidth;
     let height = canvas.height = window.innerHeight;
     
-    // Authentic Japanese characters from sushi recipes and cooking terminology
+    // English characters for light theme (original Matrix style)
+    const englishChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<>/?=+-*[]{}_|#@!$%^&():;'.split('');
+    
+    // Authentic Japanese characters from sushi recipes for dark/retro themes
     const japaneseChars = [
         // Hiragana characters (common in recipes)
         'あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'が', 'ぎ', 'ぐ', 'げ', 'ご',
@@ -229,22 +232,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const columns = Math.floor(width / fontSize);
     const drops = Array(columns).fill(1);
     let charColor = '#00FF41'; // Classic Matrix green
+    let currentCharSet = englishChars; // Default to English
     let frameCount = 0;
     let animationFrameId;
 
-    // Update colors based on theme
+    // Get current character set based on theme
+    function getCurrentCharSet() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        return (currentTheme === 'dark' || currentTheme === 'retro') ? japaneseChars : englishChars;
+    }
+
+    // Update colors and character set based on theme
     window.updateMatrixColors = () => {
         const currentTheme = document.documentElement.getAttribute('data-theme');
+        currentCharSet = getCurrentCharSet();
+        
         switch(currentTheme) {
             case 'dark':
                 charColor = '#00FF41'; // Classic Matrix green
+                console.log('Matrix: Using Japanese characters for dark theme');
                 break;
             case 'retro':
                 charColor = '#00FFFF'; // Cyan for retro
+                console.log('Matrix: Using Japanese characters for retro theme');
                 break;
             case 'light':
             default:
                 charColor = 'rgba(0, 255, 65, 0.8)'; // Semi-transparent green for light theme
+                console.log('Matrix: Using English characters for light theme');
                 break;
         }
     };
@@ -276,13 +291,18 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.font = `${fontSize}px 'Courier New', monospace`;
         ctx.textAlign = 'center';
         
-        // Add glow effect for authentic Matrix look
-        ctx.shadowColor = charColor;
-        ctx.shadowBlur = 8;
+        // Add glow effect for authentic Matrix look (stronger for dark/retro themes)
+        if (currentTheme === 'dark' || currentTheme === 'retro') {
+            ctx.shadowColor = charColor;
+            ctx.shadowBlur = 8;
+        } else {
+            ctx.shadowColor = charColor;
+            ctx.shadowBlur = 4; // Softer glow for light theme
+        }
         
         for (let i = 0; i < drops.length; i++) {
-            // Select random Japanese character
-            const char = japaneseChars[Math.floor(Math.random() * japaneseChars.length)];
+            // Select random character from current character set
+            const char = currentCharSet[Math.floor(Math.random() * currentCharSet.length)];
             const x = i * fontSize + fontSize / 2;
             const y = drops[i] * fontSize;
             
