@@ -29,19 +29,141 @@ document.addEventListener('DOMContentLoaded', function() {
         console.warn("Speech Synthesis API not available.");
     }
 
+    // --- Chess Game Activation Triggers ---
+    setupChessActivationTriggers();
+
+    function setupChessActivationTriggers() {
+        setupPhoneShake();
+        setupTypingTrigger();
+        setupKonamiCode();
+    }
+
+    function setupPhoneShake() {
+        if (window.DeviceMotionEvent) {
+            let lastUpdate = 0;
+            let x = 0, y = 0, z = 0;
+            let lastX = 0, lastY = 0, lastZ = 0;
+            const shakeThreshold = 800;
+            
+            window.addEventListener('devicemotion', (e) => {
+                const currentTime = new Date().getTime();
+                
+                if ((currentTime - lastUpdate) > 100) {
+                    const diffTime = currentTime - lastUpdate;
+                    lastUpdate = currentTime;
+                    
+                    x = e.accelerationIncludingGravity.x;
+                    y = e.accelerationIncludingGravity.y;
+                    z = e.accelerationIncludingGravity.z;
+                    
+                    const speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
+                    
+                    if (speed > shakeThreshold) {
+                        console.log('🎮 Phone shake detected! Activating chess game...');
+                        activateChessGame();
+                    }
+                    
+                    lastX = x;
+                    lastY = y;
+                    lastZ = z;
+                }
+            });
+        }
+    }
+
+    function setupTypingTrigger() {
+        let typedSequence = '';
+        const targetSequence = 'sider';
+        const resetTime = 2000;
+        let resetTimer;
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (document.getElementById('chess-game').style.display === 'flex') return;
+            
+            clearTimeout(resetTimer);
+            
+            const char = e.key.toLowerCase();
+            if (char.match(/[a-z]/)) {
+                typedSequence += char;
+                
+                if (typedSequence.includes(targetSequence)) {
+                    console.log('🎮 Typed "sider" detected! Activating chess game...');
+                    activateChessGame();
+                    typedSequence = '';
+                    return;
+                }
+                
+                if (typedSequence.length > targetSequence.length) {
+                    typedSequence = typedSequence.slice(-targetSequence.length);
+                }
+            }
+            
+            resetTimer = setTimeout(() => {
+                typedSequence = '';
+            }, resetTime);
+        });
+    }
+
+    function setupKonamiCode() {
+        const konamiCode = [
+            'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+            'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+            'KeyB', 'KeyA'
+        ];
+        let konamiIndex = 0;
+        const resetTime = 3000;
+        let resetTimer;
+        
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('chess-game').style.display === 'flex') return;
+            
+            clearTimeout(resetTimer);
+            
+            if (e.code === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                console.log(`🎮 Konami progress: ${konamiIndex}/${konamiCode.length}`);
+                
+                if (konamiIndex === konamiCode.length) {
+                    console.log('🎮 Konami code completed! Activating chess game...');
+                    activateChessGame();
+                    konamiIndex = 0;
+                    return;
+                }
+            } else {
+                konamiIndex = 0;
+            }
+            
+            resetTimer = setTimeout(() => {
+                konamiIndex = 0;
+            }, resetTime);
+        });
+    }
+
+    function activateChessGame() {
+        if (window.chessGameManager) {
+            window.chessGameManager.showGame();
+        } else {
+            console.warn('Chess game manager not loaded yet');
+            setTimeout(() => {
+                if (window.chessGameManager) {
+                    window.chessGameManager.showGame();
+                }
+            }, 500);
+        }
+    }
 
     // --- Helper Functions ---
     function scrollToElement(id) {
         const element = document.getElementById(id);
         if (element) {
-            const elementTop = element.getBoundingClientRect().top + window.pageYOffset - navHeight - 20; // Adjust for nav and add buffer
+            const elementTop = element.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
             window.scrollTo({
                 top: elementTop,
                 behavior: 'smooth'
             });
             console.log(`Scrolling to: #${id}`);
 
-            // Close mobile menu if open after navigation
             if (navLinks.classList.contains('active')) {
                  mobileMenuBtn.classList.remove('active');
                  navLinks.classList.remove('active');
@@ -54,8 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function speakFeedback(text) {
-        if (!synthesis || isSpeaking) return; // Don't interrupt itself or if unavailable
-        // Temporarily stop recognition if it's active
+        if (!synthesis || isSpeaking) return;
         const wasListening = isListening;
         if (wasListening) {
             stopListening();
@@ -64,23 +185,15 @@ document.addEventListener('DOMContentLoaded', function() {
         utterance.text = text;
         utterance.rate = 1;
         utterance.pitch = 1;
-        // Optional: Choose a voice
-        // const voices = synthesis.getVoices();
-        // utterance.voice = voices[/* index of desired voice */];
 
-        // Use onend to potentially restart listening if it was interrupted
         utterance.onend = () => {
              console.log("Feedback finished speaking.");
-             isSpeaking = false; // Reset speaking flag
-             updateReadButtonState(); // Update button style
-             // Optional: Resume listening if it was interrupted by feedback
-             // if (wasListening) {
-             //    startListening();
-             // }
+             isSpeaking = false;
+             updateReadButtonState();
         };
         utterance.onerror = (event) => {
             console.error('SpeechSynthesis Error:', event.error);
-            isSpeaking = false; // Reset flag on error
+            isSpeaking = false;
             updateReadButtonState();
         };
 
@@ -94,14 +207,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const themeSelect = document.getElementById('theme-select');
     const currentTheme = localStorage.getItem('theme') || 'light';
 
-    // Set initial theme
     document.documentElement.setAttribute('data-theme', currentTheme);
     if (themeSelect) {
         themeSelect.value = currentTheme;
     }
     if (window.updateMatrixColors) window.updateMatrixColors();
 
-    // Handle theme changes
     if (themeSelect) {
         themeSelect.addEventListener('change', function() {
             const theme = this.value;
@@ -111,7 +222,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(`Theme changed to: ${theme}`);
         });
     }
-
 
     // --- Mobile Menu Toggle ---
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
@@ -144,7 +254,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-
     // --- Active Nav Link Highlighting on Scroll ---
     const sections = document.querySelectorAll('section[id]');
     const navListItems = document.querySelectorAll('.nav-links li a');
@@ -154,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const scrollY = window.pageYOffset;
 
         sections.forEach(section => {
-            const sectionTop = section.offsetTop - navHeight - 50; // Extra buffer
+            const sectionTop = section.offsetTop - navHeight - 50;
             const sectionBottom = sectionTop + section.offsetHeight;
 
             if (scrollY >= sectionTop && scrollY < sectionBottom) {
@@ -180,10 +289,9 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     window.addEventListener('scroll', updateActiveNavLink);
-    updateActiveNavLink(); // Initial call
+    updateActiveNavLink();
 
-
-    // --- Original Matrix Rain Animation (English Characters Only) ---
+    // --- Matrix Rain Animation ---
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     let width = canvas.width = window.innerWidth;
@@ -202,13 +310,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function drawMatrix() {
         const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim();
-        let rgbaBg = 'rgba(248, 249, 250, 0.05)'; // Default light fallback
+        let rgbaBg = 'rgba(248, 249, 250, 0.05)';
         const currentTheme = document.documentElement.getAttribute('data-theme');
         
          if (currentTheme === 'dark') {
-             rgbaBg = 'rgba(18, 24, 39, 0.05)'; // Default dark fallback
+             rgbaBg = 'rgba(18, 24, 39, 0.05)';
          } else if (currentTheme === 'retro') {
-             rgbaBg = 'rgba(45, 52, 54, 0.05)'; // Retro fallback
+             rgbaBg = 'rgba(45, 52, 54, 0.05)';
          }
          
          if (bgColor.startsWith('#')) {
@@ -256,7 +364,6 @@ document.addEventListener('DOMContentLoaded', function() {
     updateMatrixColors();
     animateMatrix();
 
-
     // --- Service Cards Data & Population ---
      const services = [
         { title: 'Mobile Applications', description: 'Native & cross-platform apps delivering exceptional UX across all devices.', icon: 'fa-solid fa-mobile-screen-button' },
@@ -273,7 +380,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (servicesGrid) {
         services.forEach(service => {
             const serviceCard = document.createElement('div');
-            serviceCard.classList.add('service-card', 'fade-in'); // Add fade-in class for animation
+            serviceCard.classList.add('service-card', 'fade-in');
             serviceCard.innerHTML = `
                 <div class="icon"><i class="${service.icon}"></i></div>
                 <h3>${service.title}</h3>
@@ -285,59 +392,34 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("Services grid not found.");
     }
 
-
-    // --- Scroll Animations (Staggered Fade-In) ---
+    // --- Scroll Animations ---
     const observerOptions = { root: null, threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
     const observerCallback = (entries, observer) => {
         entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
                 const parent = entry.target.parentElement;
                 let itemIndex = 0;
-                // Check if parent is one of the grids to calculate index correctly
                  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('features-grid'))) {
                     itemIndex = Array.from(parent.children).filter(child => child.classList.contains(entry.target.classList[0])).indexOf(entry.target);
                  } else if (parent && parent.classList.contains('contact-wrapper')) {
-                     // Handle direct children of contact-wrapper (like contact-info, office-locations)
                      itemIndex = Array.from(parent.children).filter(child => child.classList.contains('fade-in')).indexOf(entry.target);
                  }
 
-
-                const delay = itemIndex * 100; // Stagger delay in ms
+                const delay = itemIndex * 100;
                 entry.target.style.transitionDelay = `${delay}ms`;
                 entry.target.classList.add('in-view');
-                observer.unobserve(entry.target); // Stop observing once animated
+                observer.unobserve(entry.target);
             }
         });
     };
     const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
-    // Observe all elements initially marked with 'fade-in'
     document.querySelectorAll('.fade-in').forEach(el => scrollObserver.observe(el));
-     // Also observe section headers (if they weren't already marked with fade-in)
      document.querySelectorAll('.section-header').forEach(el => {
          if (!el.classList.contains('fade-in')) {
              el.classList.add('fade-in');
              scrollObserver.observe(el);
          }
      });
-
-
-    // --- Form Submission Placeholder ---
-    const contactForm = document.getElementById('contact-form');
-     if (contactForm) {
-        const submitButton = contactForm.querySelector('.submit-btn');
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (submitButton) { submitButton.classList.add('loading'); submitButton.disabled = true; }
-            const formData = { /* ... get data ... */ };
-            console.log("Form Data:", formData);
-            setTimeout(() => {
-                alert('Thank you for your message! We will get back to you soon.');
-                this.reset();
-                 if (submitButton) { submitButton.classList.remove('loading'); submitButton.disabled = false; }
-            }, 1500);
-        });
-    }
-
 
     // --- Voice Navigation Implementation ---
     function updateVoiceNavButtonState() {
@@ -357,7 +439,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!recognition || isListening) return;
 
         if (isSpeaking) {
-            stopSpeaking(); // Stop speaking before listening
+            stopSpeaking();
         }
 
         try {
@@ -372,7 +454,6 @@ document.addEventListener('DOMContentLoaded', function() {
              if (error.name === 'NotAllowedError') {
                  alert("Microphone access denied. Please allow microphone access in your browser settings.");
              } else if (error.name === 'InvalidStateError'){
-                // Can happen if start() is called again too quickly
                 console.warn("Recognition already processing.");
              } else {
                  alert("Could not start voice recognition. Please try again.");
@@ -382,8 +463,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function stopListening() {
         if (!recognition || !isListening) return;
-        recognition.stop(); // This will trigger the onend event
-        // State update happens in onend
+        recognition.stop();
     }
 
     if (recognition) {
@@ -396,8 +476,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const command = event.results[0][0].transcript.toLowerCase().trim();
             console.log('Voice command received:', command);
             processVoiceCommand(command);
-            // Stop listening state *after* processing command
-            // recognition.stop() might have already been called by onspeechend
             if (isListening) {
                  isListening = false;
                  updateVoiceNavButtonState();
@@ -406,8 +484,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         recognition.onspeechend = () => {
             console.log("Speech ended.");
-            // Don't necessarily stop listening here, wait for result or error
-             stopListening(); // Stop if user stops talking
+             stopListening();
         };
 
         recognition.onerror = (event) => {
@@ -419,10 +496,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 errorMsg = "Microphone problem. Please check your microphone.";
             } else if (event.error === 'not-allowed') {
                 errorMsg = "Microphone access denied.";
-                // Avoid alert here as permission prompt should handle it
             }
              speakFeedback(errorMsg);
-             if (isListening) { // Only stop if it thinks it's listening
+             if (isListening) {
                  isListening = false;
                  updateVoiceNavButtonState();
              }
@@ -430,7 +506,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
          recognition.onend = () => {
              console.log("Recognition service ended.");
-             // Ensure button state is correct if stopped for any reason
              if (isListening) {
                  isListening = false;
                  updateVoiceNavButtonState();
@@ -449,7 +524,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function processVoiceCommand(command) {
         console.log(`Processing command: "${command}"`);
 
-        if (command.includes('home') || command.includes('top')) {
+        if (command.includes('chess') || command.includes('play chess')) {
+            activateChessGame();
+            speakFeedback("Activating chess game!");
+        } else if (command.includes('home') || command.includes('top')) {
             scrollToElement('home');
         } else if (command.includes('service')) {
             scrollToElement('services');
@@ -510,7 +588,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-
     // --- Read Page Implementation ---
      function updateReadButtonState() {
         if (!readPageBtn) return;
@@ -530,24 +607,20 @@ document.addEventListener('DOMContentLoaded', function() {
     function findVisibleSectionForReading() {
         let mostVisibleSection = null;
         let maxVisibility = 0;
-        const navOffset = navHeight + 10; // Consider space below nav
+        const navOffset = navHeight + 10;
 
         document.querySelectorAll('section[id][data-readable-section="true"]').forEach(section => {
             const rect = section.getBoundingClientRect();
             const windowHeight = window.innerHeight;
 
-            // Calculate visible portion considering nav bar
-            const visibleTop = Math.max(navOffset, rect.top); // Start check below nav
+            const visibleTop = Math.max(navOffset, rect.top);
             const visibleBottom = Math.min(windowHeight, rect.bottom);
             const visibleHeight = Math.max(0, visibleBottom - visibleTop);
 
-            // Calculate percentage visibility based on the part below the nav
             const sectionHeightBelowNav = Math.max(0, rect.bottom - navOffset);
             const visibilityPercentage = sectionHeightBelowNav > 0 ? (visibleHeight / sectionHeightBelowNav) * 100 : 0;
 
-            // Prioritize section most visible *below the navbar*
             if (visibleHeight > 0 && visibilityPercentage > maxVisibility) {
-                // Check if it's significantly visible (e.g., > 20% of its height below nav)
                  if (visibilityPercentage > 20) {
                      maxVisibility = visibilityPercentage;
                      mostVisibleSection = section;
@@ -555,7 +628,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Fallback: If nothing clearly below nav, check if *any* part of first section is visible
         if (!mostVisibleSection && sections.length > 0) {
             const firstSectionRect = sections[0].getBoundingClientRect();
              if (firstSectionRect.bottom > navOffset && firstSectionRect.top < window.innerHeight) {
@@ -573,9 +645,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
          if (readableElements.length > 0) {
              readableElements.forEach(el => {
-                 // Clone node to avoid modifying the original DOM (e.g., removing hidden elements)
                  const clone = el.cloneNode(true);
-                 // Remove potentially noisy elements (buttons, icons explicitly inside readable content)
                  clone.querySelectorAll('button, .icon, .icon-wrapper, .btn, a.contact-link').forEach(noisyEl => noisyEl.remove());
                  const elementText = clone.innerText || clone.textContent || "";
                  text += elementText.replace(/\s+/g, ' ').trim() + ". ";
@@ -587,18 +657,15 @@ document.addEventListener('DOMContentLoaded', function() {
               text = clone.innerText || clone.textContent || "";
               text = text.replace(/\s+/g, ' ').trim();
          }
-         text = text.replace(/\.\s*\./g, '.'); // Remove double periods
+         text = text.replace(/\.\s*\./g, '.');
 
-         // Add section title if not already included
          const sectionTitle = sectionElement.querySelector('h1, h2')?.innerText.trim();
          if (sectionTitle && !text.toLowerCase().includes(sectionTitle.toLowerCase())) {
              text = sectionTitle + ". " + text;
          }
 
-
          return text;
      }
-
 
     function handleReadPage() {
         if (!synthesis) return;
@@ -653,21 +720,19 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("Sorry, an error occurred while trying to read the page.");
         };
 
-        synthesis.cancel(); // Cancel previous before speaking
+        synthesis.cancel();
         synthesis.speak(utterance);
     }
 
     function stopSpeaking() {
         if (!synthesis || !isSpeaking) return;
         synthesis.cancel();
-        // State update (isSpeaking=false, button update) handled by utterance.onend or utterance.onerror
         console.log("SpeechSynthesis stopped by user.");
     }
 
     if (readPageBtn) {
         readPageBtn.addEventListener('click', handleReadPage);
     }
-
 
     // --- Subtle Mouse Move Parallax Effect ---
     const heroContent = document.querySelector('.hero-content');
@@ -678,11 +743,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const moveX = (clientX / innerWidth - 0.5) * 2;
             const moveY = (clientY / innerHeight - 0.5) * 2;
             const strength = 5;
-            // Apply with requestAnimationFrame for better performance
              requestAnimationFrame(() => {
                 heroContent.style.transform = `translate(${moveX * strength * -1}px, ${moveY * strength * -1}px)`;
              });
         });
     }
+
+    // --- Easter Egg Messages ---
+    console.log('%c🎮 SIDER.dev Secret Features Enabled! 🎮', 'color: #00ff41; font-size: 16px; font-weight: bold;');
+    console.log('%cTry these secret activation methods:', 'color: #4CAF50; font-size: 14px;');
+    console.log('%c📱 Shake your phone', 'color: #2196F3; font-size: 12px;');
+    console.log('%c⌨️  Type "sider" anywhere', 'color: #FF9800; font-size: 12px;');
+    console.log('%c🎮 Konami Code: ↑↑↓↓←→←→BA', 'color: #E91E63; font-size: 12px;');
+    console.log('%c🎤 Say "chess" with voice command', 'color: #9C27B0; font-size: 12px;');
 
 }); // End DOMContentLoaded
