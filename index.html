@@ -5,96 +5,219 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIDER.dev | Software Development & Digital Innovation Research</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="nexus-styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<body >
-    <!-- Secret Game Container -->
-    <div id="secret-game" class="secret-game" style="display: none;">
-        <div class="game-header">
-            <div class="game-title">SIDER RUNNER</div>
-            <div class="game-stats">
-                <div class="stat">
-                    <span class="stat-label">SCORE:</span>
-                    <span id="game-score">0</span>
+<body>
+    <!-- SIDER NEXUS - Secret Game Container -->
+    <div id="nexus-game" class="nexus-game" style="display: none;">
+        <!-- Game Main Menu -->
+        <div id="game-menu" class="game-menu">
+            <div class="menu-bg-effects"></div>
+            <div class="menu-content">
+                <div class="game-logo">
+                    <h1>SIDER NEXUS</h1>
+                    <p class="game-tagline">Navigate the Digital Frontier</p>
                 </div>
-                <div class="stat">
-                    <span class="stat-label">HIGH:</span>
-                    <span id="game-high-score">0</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">LEVEL:</span>
-                    <span id="game-level">1</span>
-                </div>
-            </div>
-            <button id="close-game" class="close-game-btn">×</button>
-        </div>
-        <canvas id="game-canvas" width="800" height="400"></canvas>
-        <div class="game-controls">
-            <div class="game-instructions">
-                <div class="instruction">
-                    <kbd>SPACE</kbd> or <kbd>↑</kbd> Jump
-                </div>
-                <div class="instruction">
-                    <kbd>↓</kbd> Slide
-                </div>
-                <div class="instruction">
-                    <kbd>ESC</kbd> Pause
-                </div>
-            </div>
-            <div class="power-up-indicators">
-                <div class="power-up-item">
-                    <div class="power-up-icon speed">⚡</div>
-                    <div class="power-up-name">Speed Boost</div>
-                </div>
-                <div class="power-up-item">
-                    <div class="power-up-icon shield">🛡️</div>
-                    <div class="power-up-name">Shield</div>
-                </div>
-                <div class="power-up-item">
-                    <div class="power-up-icon coin">💰</div>
-                    <div class="power-up-name">Coin Magnet</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Game Over Modal -->
-        <div id="game-over-modal" class="game-modal">
-            <div class="modal-content">
-                <h2>GAME OVER</h2>
-                <div class="final-stats">
-                    <div class="final-stat">
-                        <span>Final Score:</span>
-                        <span id="final-score">0</span>
-                    </div>
-                    <div class="final-stat">
-                        <span>Level Reached:</span>
-                        <span id="final-level">1</span>
-                    </div>
-                    <div class="final-stat">
-                        <span>Coins Collected:</span>
-                        <span id="final-coins">0</span>
+                
+                <div class="character-selection">
+                    <h3>Choose Your Class</h3>
+                    <div class="character-grid">
+                        <div class="character-card" data-class="hacker">
+                            <div class="char-icon">👨‍💻</div>
+                            <h4>HACKER</h4>
+                            <p>Code manipulation specialist</p>
+                            <div class="char-stats">
+                                <span>ATK: ⭐⭐⭐⭐</span>
+                                <span>DEF: ⭐⭐</span>
+                                <span>SPD: ⭐⭐⭐</span>
+                            </div>
+                        </div>
+                        
+                        <div class="character-card" data-class="guardian">
+                            <div class="char-icon">🛡️</div>
+                            <h4>GUARDIAN</h4>
+                            <p>System defense expert</p>
+                            <div class="char-stats">
+                                <span>ATK: ⭐⭐</span>
+                                <span>DEF: ⭐⭐⭐⭐⭐</span>
+                                <span>SPD: ⭐⭐</span>
+                            </div>
+                        </div>
+                        
+                        <div class="character-card" data-class="explorer">
+                            <div class="char-icon">🚀</div>
+                            <h4>EXPLORER</h4>
+                            <p>Network navigation ace</p>
+                            <div class="char-stats">
+                                <span>ATK: ⭐⭐⭐</span>
+                                <span>DEF: ⭐⭐</span>
+                                <span>SPD: ⭐⭐⭐⭐⭐</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="achievements" id="achievements-list"></div>
-                <div class="modal-buttons">
-                    <button id="restart-game" class="game-btn primary">PLAY AGAIN</button>
-                    <button id="close-modal" class="game-btn secondary">CLOSE</button>
+                
+                <div class="menu-buttons">
+                    <button id="start-game" class="nexus-btn primary">START MISSION</button>
+                    <button id="view-stats" class="nexus-btn secondary">STATISTICS</button>
+                    <button id="settings-btn" class="nexus-btn secondary">SETTINGS</button>
+                    <button id="close-nexus" class="nexus-btn danger">EXIT NEXUS</button>
                 </div>
             </div>
         </div>
         
-        <!-- Pause Modal -->
+        <!-- Game Play Interface -->
+        <div id="game-interface" class="game-interface" style="display: none;">
+            <!-- HUD -->
+            <div class="game-hud">
+                <div class="hud-left">
+                    <div class="player-info">
+                        <div class="health-bar">
+                            <div class="health-fill" id="health-fill"></div>
+                            <span class="health-text" id="health-text">100/100</span>
+                        </div>
+                        <div class="energy-bar">
+                            <div class="energy-fill" id="energy-fill"></div>
+                            <span class="energy-text" id="energy-text">50/50</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hud-center">
+                    <div class="level-info">
+                        <span id="current-level">NEXUS LEVEL 1</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="level-progress"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hud-right">
+                    <div class="game-stats-live">
+                        <div class="stat-item">
+                            <span class="stat-label">SCORE</span>
+                            <span class="stat-value" id="live-score">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">DATA</span>
+                            <span class="stat-value" id="live-data">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">WAVE</span>
+                            <span class="stat-value" id="live-wave">1</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="pause-game" class="pause-btn">⏸️</button>
+            </div>
+            
+            <!-- Main Game Canvas -->
+            <canvas id="nexus-canvas" class="nexus-canvas"></canvas>
+            
+            <!-- Mobile Controls -->
+            <div class="mobile-controls" id="mobile-controls">
+                <div class="control-section left">
+                    <div class="movement-pad">
+                        <button class="move-btn" data-direction="up">↑</button>
+                        <div class="middle-row">
+                            <button class="move-btn" data-direction="left">←</button>
+                            <button class="move-btn" data-direction="right">→</button>
+                        </div>
+                        <button class="move-btn" data-direction="down">↓</button>
+                    </div>
+                </div>
+                
+                <div class="control-section right">
+                    <button class="action-btn primary" id="attack-btn">⚔️</button>
+                    <button class="action-btn secondary" id="special-btn">✨</button>
+                    <button class="action-btn utility" id="interact-btn">🔍</button>
+                </div>
+            </div>
+            
+            <!-- Ability Bar -->
+            <div class="ability-bar">
+                <div class="ability-slot" data-slot="1">
+                    <div class="ability-icon">🔥</div>
+                    <div class="cooldown-overlay" id="ability1-cooldown"></div>
+                    <span class="hotkey">1</span>
+                </div>
+                <div class="ability-slot" data-slot="2">
+                    <div class="ability-icon">⚡</div>
+                    <div class="cooldown-overlay" id="ability2-cooldown"></div>
+                    <span class="hotkey">2</span>
+                </div>
+                <div class="ability-slot" data-slot="3">
+                    <div class="ability-icon">🛡️</div>
+                    <div class="cooldown-overlay" id="ability3-cooldown"></div>
+                    <span class="hotkey">3</span>
+                </div>
+                <div class="ability-slot" data-slot="4">
+                    <div class="ability-icon">🎯</div>
+                    <div class="cooldown-overlay" id="ability4-cooldown"></div>
+                    <span class="hotkey">4</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Game Modals -->
         <div id="pause-modal" class="game-modal">
             <div class="modal-content">
-                <h2>PAUSED</h2>
-                <p>Ready to continue your adventure?</p>
+                <h2>NEXUS PAUSED</h2>
+                <div class="pause-stats">
+                    <p>Current Session: <span id="session-time">00:00</span></p>
+                    <p>Enemies Defeated: <span id="enemies-defeated">0</span></p>
+                </div>
                 <div class="modal-buttons">
-                    <button id="resume-game" class="game-btn primary">RESUME</button>
-                    <button id="quit-game" class="game-btn secondary">QUIT</button>
+                    <button id="resume-nexus" class="nexus-btn primary">RESUME</button>
+                    <button id="save-exit" class="nexus-btn secondary">SAVE & EXIT</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="levelup-modal" class="game-modal">
+            <div class="modal-content">
+                <h2>LEVEL UP!</h2>
+                <div class="upgrade-selection">
+                    <h3>Choose Your Enhancement:</h3>
+                    <div class="upgrade-options" id="upgrade-options">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="death-modal" class="game-modal">
+            <div class="modal-content">
+                <h2>CONNECTION LOST</h2>
+                <div class="death-stats">
+                    <div class="stat-row">Final Score: <span id="death-score">0</span></div>
+                    <div class="stat-row">Levels Cleared: <span id="death-levels">0</span></div>
+                    <div class="stat-row">Time Survived: <span id="death-time">00:00</span></div>
+                    <div class="stat-row">Data Collected: <span id="death-data">0</span></div>
+                </div>
+                <div class="progression-rewards" id="progression-rewards">
+                    <!-- Show unlocks and meta-progression -->
+                </div>
+                <div class="modal-buttons">
+                    <button id="revive-btn" class="nexus-btn primary">REVIVE (💎1)</button>
+                    <button id="restart-nexus" class="nexus-btn secondary">RESTART RUN</button>
+                    <button id="back-to-menu" class="nexus-btn tertiary">MAIN MENU</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="achievement-popup" class="achievement-popup">
+            <div class="achievement-content">
+                <div class="achievement-icon">🏆</div>
+                <div class="achievement-text">
+                    <h4 id="achievement-title">Achievement Unlocked!</h4>
+                    <p id="achievement-desc">Description here</p>
                 </div>
             </div>
         </div>
@@ -141,13 +264,12 @@
     <section id="home" class="hero" data-readable-section="true">
         <canvas id="matrix-canvas" class="matrix-canvas"></canvas>
         <div class="container hero-content">
-             <!--  <h1 class="hero-title" data-readable-content="true">Software Innovation & Digital Economy<span>Research</span></h1> -->
             <h1 class="hero-title" data-readable-content="true">Software Innovation & Digital Economy Research</h1>
             <p class="hero-subtitle" data-readable-content="true">Propelling digital business forward through cutting-edge solutions and transformative technology</p>
             <a href="#contact" class="btn primary-btn hero-cta">
                 Start Your Project with SIDER
                 <span class="btn-arrow"><i class="fa-solid fa-arrow-right"></i></span>
-                 <span class="btn-loader"></span>
+                <span class="btn-loader"></span>
             </a>
         </div>
     </section>
@@ -174,18 +296,18 @@
                 <p>The strategic advantages that set us apart</p>
             </div>
             <div class="features-grid" data-readable-content="true">
-                 <div class="feature-card fade-in"> <!-- Add fade-in here too -->
+                <div class="feature-card fade-in">
                     <div class="icon-wrapper"><i class="fa-solid fa-users-gear"></i></div>
                     <h3>Expert Teams</h3>
                     <p>Dedicated specialists with deep industry knowledge, delivering exceptional, collaborative results.</p>
                 </div>
                 <div class="feature-card fade-in">
-                     <div class="icon-wrapper"><i class="fa-solid fa-lightbulb"></i></div>
+                    <div class="icon-wrapper"><i class="fa-solid fa-lightbulb"></i></div>
                     <h3>Market Insight</h3>
                     <p>Strategic understanding of digital trends to ensure your business leads, not follows.</p>
                 </div>
                 <div class="feature-card fade-in">
-                     <div class="icon-wrapper"><i class="fa-solid fa-gem"></i></div>
+                    <div class="icon-wrapper"><i class="fa-solid fa-gem"></i></div>
                     <h3>Quality Assurance</h3>
                     <p>Rigorous testing and QA processes guarantee reliable, high-performance, secure solutions.</p>
                 </div>
@@ -204,52 +326,20 @@
         <div class="container">
             <div class="section-header" data-readable-content="true">
                 <h2>Let's Innovate Together</h2>
-                <p>Reach out to us</p> <!-- Updated subtitle -->
+                <p>Reach out to us</p>
             </div>
             <div class="contact-wrapper">
-                <!-- Email Info -->
                 <div class="contact-info fade-in" data-readable-content="true">
-                     <div class="contact-item">
+                    <div class="contact-item">
                         <div class="icon-wrapper"><i class="fa-solid fa-envelope-open-text"></i></div>
                         <div class="details">
                             <h3></h3>
-                             <p><a href="mailto:sider.dev@outlook.com" class="contact-link">sider.dev@outlook.com</a></p>
+                            <p><a href="mailto:sider.dev@outlook.com" class="contact-link">sider.dev@outlook.com</a></p>
                         </div>
                     </div>
                     <p class="contact-prompt">We respond within one business day.</p>
                 </div>
-
-                <!-- Office Locations -->
-                <!-- 
-                <div class="office-locations fade-in">
-                    <h3 data-readable-content="true">Our Global Network</h3>
-                    <div class="locations-container">
-                        <div class="current-locations" data-readable-content="true">
-                            <h4><i class="fa-solid fa-map-marked-alt icon-header"></i> Currently Operating In:</h4>
-                            <div class="location-list">
-                                <p class="location-item"><i class="fa-solid fa-location-dot location-icon current"></i> Bern, Switzerland (HQ)</p>
-                                <p class="location-item"><i class="fa-solid fa-location-dot location-icon current"></i> Stockholm, Sweden</p>
-                                <p class="location-item"><i class="fa-solid fa-location-dot location-icon current"></i> Izmir, Türkiye</p>
-                                <p class="location-item"><i class="fa-solid fa-location-dot location-icon current"></i> Haskovo, Bulgaria</p>
-                            </div>
-                        </div>
-                        <div class="future-locations" data-readable-content="true">
-                            <h4><i class="fa-solid fa-plane-departure icon-header"></i> Expanding Soon To:</h4>
-                             <div class="location-list">
-                                <p class="location-item"><i class="fa-solid fa-map-pin location-icon future"></i> Tokyo, Japan</p>
-                                <p class="location-item"><i class="fa-solid fa-map-pin location-icon future"></i> Sydney, Australia</p>
-                                <p class="location-item"><i class="fa-solid fa-map-pin location-icon future"></i> San Francisco, USA</p>
-                                <p class="location-item"><i class="fa-solid fa-map-pin location-icon future"></i> Washington D.C., USA</p>      
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                -->
-                 <!-- Form commented out -->
-                 <!--
-                 <form id="contact-form" class="contact-form"> ... </form>
-                 -->
-             </div>
+            </div>
         </div>
     </section>
 
@@ -259,19 +349,12 @@
             <div class="footer-content">
                 <div class="footer-logo">SIDER<span>.dev</span></div>
                 <p class="footer-tagline">Innovating the Digital Frontier.</p>
-                <!--
-                <div class="footer-links">
-                     <a href="#services">Services</a> |
-                     <a href="#why-sider">Why SIDER?</a> |
-                     <a href="#">Privacy Policy</a>
-                </div>
-                -->
                 <p class="copyright">© 2025 SIDER.dev. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script src="script.js"></script>
-    <script src="game.js"></script>
+    <script src="nexus-game.js"></script>
 </body>
 </html>
