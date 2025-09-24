@@ -203,23 +203,34 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(`Speaking feedback: "${text}"`);
     }
 
-    // --- Theme Switch ---
-    const themeSelect = document.getElementById('theme-select');
+    // --- Theme Toggle ---
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.querySelector('.theme-icon');
     const currentTheme = localStorage.getItem('theme') || 'light';
 
+    // Set initial theme
     document.documentElement.setAttribute('data-theme', currentTheme);
-    if (themeSelect) {
-        themeSelect.value = currentTheme;
-    }
+    updateThemeIcon(currentTheme);
     if (window.updateMatrixColors) window.updateMatrixColors();
 
-    if (themeSelect) {
-        themeSelect.addEventListener('change', function() {
-            const theme = this.value;
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
+    function updateThemeIcon(theme) {
+        if (themeIcon) {
+            themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
+            themeToggle.setAttribute('aria-label', `Switch to ${theme === 'light' ? 'dark' : 'light'} theme`);
+            themeToggle.setAttribute('title', `Switch to ${theme === 'light' ? 'dark' : 'light'} theme`);
+        }
+    }
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
             if (window.updateMatrixColors) window.updateMatrixColors();
-            console.log(`Theme changed to: ${theme}`);
+            console.log(`Theme switched to: ${newTheme}`);
         });
     }
 
@@ -315,8 +326,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
          if (currentTheme === 'dark') {
              rgbaBg = 'rgba(18, 24, 39, 0.05)';
-         } else if (currentTheme === 'retro') {
-             rgbaBg = 'rgba(45, 52, 54, 0.05)';
          }
          
          if (bgColor.startsWith('#')) {
@@ -545,33 +554,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
          else if (command.includes('dark mode') || command.includes('night mode')) {
              if (document.documentElement.getAttribute('data-theme') !== 'dark') {
-                if (themeSelect) {
-                    themeSelect.value = 'dark';
-                    themeSelect.dispatchEvent(new Event('change'));
-                }
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+                if (window.updateMatrixColors) window.updateMatrixColors();
                 speakFeedback("Switched to dark mode.");
              } else {
                  speakFeedback("Already in dark mode.");
              }
          } else if (command.includes('light mode') || command.includes('day mode')) {
              if (document.documentElement.getAttribute('data-theme') !== 'light') {
-                 if (themeSelect) {
-                     themeSelect.value = 'light';
-                     themeSelect.dispatchEvent(new Event('change'));
-                 }
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+                if (window.updateMatrixColors) window.updateMatrixColors();
                 speakFeedback("Switched to light mode.");
              } else {
                  speakFeedback("Already in light mode.");
-             }
-         } else if (command.includes('retro mode') || command.includes('retro theme') || command.includes('80s mode')) {
-             if (document.documentElement.getAttribute('data-theme') !== 'retro') {
-                 if (themeSelect) {
-                     themeSelect.value = 'retro';
-                     themeSelect.dispatchEvent(new Event('change'));
-                 }
-                speakFeedback("Switched to retro mode.");
-             } else {
-                 speakFeedback("Already in retro mode.");
              }
          }
         else if (command.includes('read') || command.includes('speak')) {
