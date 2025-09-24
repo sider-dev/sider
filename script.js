@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- Theme Toggle ---
     const themeToggle = document.getElementById('theme-toggle');
-    const themeIcon = document.querySelector('.theme-icon');
+    const themeIcon = themeToggle?.querySelector('i'); // Get the FontAwesome icon inside the button
     const currentTheme = localStorage.getItem('theme') || 'light';
 
     // Set initial theme
@@ -215,7 +215,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateThemeIcon(theme) {
         if (themeIcon) {
-            themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
+            // Update FontAwesome icon classes instead of emoji text
+            if (theme === 'light') {
+                themeIcon.className = 'fa-solid fa-moon';
+            } else {
+                themeIcon.className = 'fa-solid fa-sun';
+            }
+            
             themeToggle.setAttribute('aria-label', `Switch to ${theme === 'light' ? 'dark' : 'light'} theme`);
             themeToggle.setAttribute('title', `Switch to ${theme === 'light' ? 'dark' : 'light'} theme`);
         }
